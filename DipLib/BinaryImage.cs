@@ -1,8 +1,3 @@
-using System;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Collections;
 namespace DipLib
 {
     public class BinaryImage
@@ -12,6 +7,11 @@ namespace DipLib
         public int PixelWidth { get => Pixels.GetLength(0); }
 
         public byte[,] Pixels { get; set; }
+
+        public BinaryImage(int pixelWidth, int pixelHeight)
+        {
+            Pixels = new byte[pixelWidth, pixelHeight];
+        }
 
         public BinaryImage(byte[,] pixels)
         {
@@ -41,49 +41,6 @@ namespace DipLib
             }
             return res;
         }
-
-        //private static double GetThresholdByOtsu(byte[] grayScalePixels)
-        //{
-        //    int pixelsCount = grayScalePixels.Length;
-        //    int[] histogram = GetGrayScaleHistogram(grayScalePixels);
-
-        //    int classSumTotal = 0;
-        //    for (int i = 1; i < 256; i++)
-        //    {
-        //        classSumTotal += histogram[i] * i;
-        //    }
-
-        //    int classProbLeft = 0;
-        //    int classSumLeft = 0;
-        //    double maxInnerVar = 0;
-        //    int threshold1 = 0, threshold2 = 0;
-
-        //    for (int threshold = 0; threshold < 256; threshold++)
-        //    {
-        //        int probability = histogram[threshold];
-        //        classProbLeft += probability;
-        //        if (classProbLeft == 0) continue;
-
-        //        int classProbRight = pixelsCount - classProbLeft;
-        //        if (classProbRight == 0) break;
-
-        //        classSumLeft += threshold * probability;
-        //        double classMeanLeft = (double)classSumLeft / classProbLeft;
-        //        double classMeanRight = (double)(classSumTotal - classSumLeft) / classProbRight;
-        //        double innerClassVar = classProbLeft * classProbRight * (classMeanLeft - classMeanRight) * (classMeanLeft - classMeanRight);
-        //        if (innerClassVar >= maxInnerVar)
-        //        {
-        //            threshold1 = threshold;
-        //            if (innerClassVar > maxInnerVar)
-        //            {
-        //                threshold2 = threshold;
-        //            }
-        //            maxInnerVar = innerClassVar;
-        //        }
-        //    }
-
-        //    return (threshold1 + threshold2) / 2.0;
-        //}
 
         private static double GetThresholdByOtsu(byte[] grayScalePixels)
         {
@@ -133,6 +90,56 @@ namespace DipLib
                 }
             }
             return data;
+        }
+    }
+
+    public class StructuringElement : BinaryImage
+    {
+        public Point Origin { get; set; }
+
+        public StructuringElement(byte[,] pixels, Point origin) : base(pixels)
+        {
+            Origin = origin;
+        }
+
+        public StructuringElement(int pixelWidth, int pixelHeight, Point origin) : base(pixelWidth, pixelHeight)
+        {
+            Origin = origin;
+        }
+    }
+
+    public static class StructuringElements
+    {
+        public static StructuringElement Circle(int radius)
+        {
+            var origin = new Point(radius, radius);
+            var element = new StructuringElement(radius * 2, radius * 2, origin);
+            int squaredRadis = radius * radius;
+            for (int x = 0; x < element.PixelWidth; x++)
+            {
+                for (int y = 0; y < element.PixelHeight; y++)
+                {
+                    element.Pixels[x, y] = (byte)(element.Origin.GetSquaredDistance(origin) < squaredRadis ? 255 : 0);
+                }
+            }
+            return element;
+        }
+    }
+
+    public struct Point
+    {
+        int x;
+        int y;
+
+        public Point(int x = 0, int y = 0)
+        {
+            this.x = x;
+            this.y = y;
+        }
+
+        public int GetSquaredDistance(Point point)
+        {
+            return (x - point.x) * (x - point.x) + (y - point.y) * (y - point.y);
         }
     }
 }
