@@ -3,12 +3,21 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using DipLib;
 using Microsoft.Win32;
 
 namespace DipWpf
 {
+    public static class DipLibCommands
+    {
+        public static RoutedCommand ConvertToGrayscale { get; } = new RoutedCommand();
+
+        public static RoutedCommand Binarize { get; } = new RoutedCommand();
+    }
+
     public class ImageHelper : INotifyPropertyChanged
     {
         public enum FileType
@@ -23,23 +32,23 @@ namespace DipWpf
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public BitmapImage Image { get; set; }
+        public BitmapSource Image { get; set; }
 
-        public bool IsImageOpened { get => Image != null && !string.IsNullOrEmpty(FileName); }
+        public BitmapSource Grayscale { get; set; }
 
-        public string FileName { get; set; }
+        public BinaryImage BinaryImage { get; set; }
+
+        public string FileName { get; private set; }
+
+        public ImageHelper(string fileName)
+        {
+            FileName = fileName;
+            Image = new BitmapImage(new Uri(fileName));
+        }
 
         private void NotifyPropertyChanged(String name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        public void Open()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() != true) return;
-            FileName = openFileDialog.FileName;
-            Image = new BitmapImage(new Uri(FileName));
-            NotifyPropertyChanged("Image");
         }
 
         private FileType? GetFileTypeByExtension(string extension)
@@ -111,6 +120,31 @@ namespace DipWpf
             var saveFileDialog = new SaveFileDialog();
             if (saveFileDialog.ShowDialog() != true) return;
             SaveImage(saveFileDialog.FileName);
+            FileName = saveFileDialog.FileName;
+        }
+
+        public void ConvertToGrayscale()
+        {
+            Grayscale = Image = new FormatConvertedBitmap(Image, PixelFormats.Gray8, BitmapPalettes.Gray256, 0);
+            NotifyPropertyChanged("Image");
+        }
+
+        private void RefreshBinaryImage()
+        {
+            Image = BitmapSource.Create(Image.PixelWidth, Image.PixelHeight, Image.DpiX, Image.DpiY, PixelFormats.Gray8, BitmapPalettes.Gray256, BinaryImage.ToPixelsData(), BinaryImage.PixelWidth);
+            NotifyPropertyChanged("Image");
+        }
+
+        public void Binarize()
+        {
+            if (Grayscale == null)
+            {
+                Grayscale = new FormatConvertedBitmap(Image, PixelFormats.Gray8, BitmapPalettes.Gray256, 0);
+            }
+            byte[] pixels = new byte[Grayscale.PixelWidth * Grayscale.PixelHeight];
+            Grayscale.CopyPixels(pixels, Grayscale.PixelWidth, 0);
+            BinaryImage = new BinaryImage(pixels, Grayscale.PixelWidth, Grayscale.PixelHeight);
+            RefreshBinaryImage();
         }
     }
 }

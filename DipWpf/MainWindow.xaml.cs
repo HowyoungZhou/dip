@@ -1,6 +1,8 @@
 ﻿using DipLib;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,9 +21,9 @@ namespace DipWpf
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window,INotifyPropertyChanged
     {
-        public ImageHelper ImageHelper { get; set; } = new ImageHelper();
+        public ImageHelper ImageHelper { get; set; }
 
         public MainWindow()
         {
@@ -39,14 +41,19 @@ namespace DipWpf
             InitializeComponent();
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private void IsImageOpened(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = ImageHelper.IsImageOpened;
+            e.CanExecute = ImageHelper != null;
         }
 
         private void OpenImage(object sender, ExecutedRoutedEventArgs e)
         {
-            ImageHelper.Open();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() != true) return;
+            ImageHelper = new ImageHelper(openFileDialog.FileName);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ImageHelper"));
         }
 
         private void SaveImage(object sender, ExecutedRoutedEventArgs e)
@@ -62,6 +69,15 @@ namespace DipWpf
         private void Exit(object sender, ExecutedRoutedEventArgs e)
         {
             Close();
+        }
+
+        private void ConvertToGrayscale(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.ConvertToGrayscale();
+        }
+
+        private void Binarize(object sender, ExecutedRoutedEventArgs e){
+            ImageHelper.Binarize();
         }
     }
 }

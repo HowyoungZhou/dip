@@ -12,6 +12,8 @@
         <CommandBinding Command="ApplicationCommands.Save" Executed="SaveImage" CanExecute="IsImageOpened"/>
         <CommandBinding Command="ApplicationCommands.SaveAs" Executed="SaveImageAs" CanExecute="IsImageOpened"/>
         <CommandBinding Command="ApplicationCommands.Close" Executed="Exit"/>
+        <CommandBinding Command="{x:Static local:DipLibCommands.ConvertToGrayscale}" Executed="ConvertToGrayscale" CanExecute="IsImageOpened"/>
+        <CommandBinding Command="{x:Static local:DipLibCommands.Binarize}" Executed="Binarize" CanExecute="IsImageOpened"/>
     </Window.CommandBindings>
     
     <Grid>
@@ -28,8 +30,8 @@
                 <MenuItem Header="退出(_E)" Command="ApplicationCommands.Close"/>
             </MenuItem>
             <MenuItem Header="转换(_C)">
-                <MenuItem Header="转换为灰度(_G)"/>
-                <MenuItem Header="二值化(_B)"/>
+                <MenuItem Header="转换为灰度(_G)" Command="{x:Static local:DipLibCommands.ConvertToGrayscale}"/>
+                <MenuItem Header="二值化(_B)" Command="{x:Static local:DipLibCommands.Binarize}"/>
             </MenuItem>
             <MenuItem Header="形态学(_M)">
                 <MenuItem Header="膨胀(_D)"/>
