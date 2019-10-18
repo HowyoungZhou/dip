@@ -21,21 +21,47 @@ namespace DipWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        public ImageSource CurrentImage { get; set; }
+        public ImageHelper ImageHelper { get; set; } = new ImageHelper();
 
         public MainWindow()
         {
             DataContext = this;
 
-            var image = new BitmapImage(new Uri(@"E:\sample2.jpg"));
-            var grayScale = new FormatConvertedBitmap(image, PixelFormats.Gray8, BitmapPalettes.Gray256, 0);
-            byte[] pixels = new byte[grayScale.PixelWidth * grayScale.PixelHeight];
-            grayScale.CopyPixels(pixels, grayScale.PixelWidth, 0);
-            var binaryImageData = new BinaryImage(pixels, grayScale.PixelWidth, grayScale.PixelHeight).Close(StructuringElements.Circle(2));
-            CurrentImage = BitmapSource.Create(grayScale.PixelWidth, grayScale.PixelHeight, grayScale.DpiX, grayScale.DpiY, PixelFormats.Gray8, BitmapPalettes.Gray256, binaryImageData.ToPixelsData(), binaryImageData.PixelWidth);
-            //CurrentImage = binaryImageData;
+            // var image = new BitmapImage(new Uri(@"E:\sample3.jpg"));
+            // var grayScale = new FormatConvertedBitmap(image, PixelFormats.Gray8, BitmapPalettes.Gray256, 0);
+            // byte[] pixels = new byte[grayScale.PixelWidth * grayScale.PixelHeight];
+            // grayScale.CopyPixels(pixels, grayScale.PixelWidth, 0);
+            // //var binaryImageData = new BinaryImage(pixels, grayScale.PixelWidth, grayScale.PixelHeight);
+            // var binaryImageData = new BinaryImage(pixels, grayScale.PixelWidth, grayScale.PixelHeight).Close(StructuringElements.Circle(2));
+            // CurrentImage = BitmapSource.Create(grayScale.PixelWidth, grayScale.PixelHeight, grayScale.DpiX, grayScale.DpiY, PixelFormats.Gray8, BitmapPalettes.Gray256, binaryImageData.ToPixelsData(), binaryImageData.PixelWidth);
+            // //CurrentImage = image;
 
             InitializeComponent();
+        }
+
+        private void IsImageOpened(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = ImageHelper.IsImageOpened;
+        }
+
+        private void OpenImage(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.Open();
+        }
+
+        private void SaveImage(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.Save();
+        }
+
+        private void SaveImageAs(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.SaveAs();
+        }
+
+        private void Exit(object sender, ExecutedRoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
