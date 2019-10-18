@@ -2,11 +2,17 @@ namespace DipLib
 {
     public class BinaryImage
     {
+        public enum BinaryPixel
+        {
+            white,
+            black
+        }
+
         public int PixelHeight { get => Pixels.GetLength(1); }
 
         public int PixelWidth { get => Pixels.GetLength(0); }
 
-        public byte this[int x, int y]
+        public BinaryPixel this[int x, int y]
         {
             get
             {
@@ -18,7 +24,7 @@ namespace DipLib
             }
         }
 
-        public byte this[Point point]
+        public BinaryPixel this[Point point]
         {
             get
             {
@@ -30,14 +36,14 @@ namespace DipLib
             }
         }
 
-        public byte[,] Pixels { get; set; }
+        public BinaryPixel[,] Pixels { get; set; }
 
         public BinaryImage(int pixelWidth, int pixelHeight)
         {
-            Pixels = new byte[pixelWidth, pixelHeight];
+            Pixels = new BinaryPixel[pixelWidth, pixelHeight];
         }
 
-        public BinaryImage(byte[,] pixels)
+        public BinaryImage(BinaryPixel[,] pixels)
         {
             Pixels = pixels;
         }
@@ -45,13 +51,13 @@ namespace DipLib
         public BinaryImage(byte[] grayScalePixels, int pixelWidth, int pixelHeight)
         {
             double threshold = GetThresholdByOtsu(grayScalePixels);
-            Pixels = new byte[pixelWidth, pixelHeight];
+            Pixels = new BinaryPixel[pixelWidth, pixelHeight];
             for (int x = 0; x < pixelWidth; x++)
             {
                 for (int y = 0; y < pixelHeight; y++)
                 {
                     byte pixel = grayScalePixels[y * pixelWidth + x];
-                    Pixels[x, y] = (byte)(pixel > threshold ? 255 : 0);
+                    Pixels[x, y] = pixel > threshold ? BinaryPixel.white : BinaryPixel.black;
                 }
             }
         }
@@ -63,7 +69,7 @@ namespace DipLib
             {
                 for (int y = 0; y < image.PixelHeight; y++)
                 {
-                    res[x, y] = (byte)(image[x, y] == 0 ? 255 : 0);
+                    res[x, y] = (image[x, y] == BinaryPixel.black ? BinaryPixel.white : BinaryPixel.black);
                 }
             }
             return res;
@@ -123,7 +129,7 @@ namespace DipLib
             {
                 for (int y = 0; y < PixelHeight; y++)
                 {
-                    data[y * PixelWidth + x] = Pixels[x, y];
+                    data[y * PixelWidth + x] = (byte)(Pixels[x, y] == BinaryPixel.black ? 0 : 255);
                 }
             }
             return data;
@@ -143,20 +149,21 @@ namespace DipLib
                     Point point = originOnImage - structElement.Origin + new Point(dx, dy);
                     //if (x1 < 0 || x1 >= PixelWidth || y1 < 0 || y1 >= PixelHeight) continue;
                     if (!IsPointInImage(point)) continue;
-                    if (structElement[dx, dy] == 255 && this[point] == 255) return true;
+                    if (structElement[dx, dy] == BinaryPixel.black && this[point] == BinaryPixel.black) return true;
                 }
             }
             return false;
         }
 
-        private bool IsCovered(StructuringElement structElement, Point originOnImage){
+        private bool IsCovered(StructuringElement structElement, Point originOnImage)
+        {
             for (int dx = 0; dx < structElement.PixelWidth; dx++)
             {
                 for (int dy = 0; dy < structElement.PixelHeight; dy++)
                 {
                     Point point = originOnImage - structElement.Origin + new Point(dx, dy);
                     if (!IsPointInImage(point)) continue;
-                    if (structElement[dx, dy] == 255 && this[point] != 255) return false;
+                    if (structElement[dx, dy] == BinaryPixel.black && this[point] != BinaryPixel.black) return false;
                 }
             }
             return true;
@@ -169,7 +176,7 @@ namespace DipLib
             {
                 for (int y = 0; y < PixelHeight; y++)
                 {
-                    if (IsOverlap(structElement, new Point(x, y))) res[x, y] = 255;
+                    if (IsOverlap(structElement, new Point(x, y))) res[x, y] = BinaryPixel.black;
                 }
             }
             return res;
@@ -182,7 +189,7 @@ namespace DipLib
             {
                 for (int y = 0; y < PixelHeight; y++)
                 {
-                    if (IsCovered(structElement, new Point(x, y))) res[x, y] = 255;
+                    if (IsCovered(structElement, new Point(x, y))) res[x, y] = BinaryPixel.black;
                 }
             }
             return res;
@@ -203,7 +210,7 @@ namespace DipLib
     {
         public Point Origin { get; set; }
 
-        public StructuringElement(byte[,] pixels, Point origin) : base(pixels)
+        public StructuringElement(BinaryPixel[,] pixels, Point origin) : base(pixels)
         {
             Origin = origin;
         }
@@ -225,7 +232,7 @@ namespace DipLib
             {
                 for (int y = 0; y < element.PixelHeight; y++)
                 {
-                    element[x, y] = (byte)(element.Origin.GetSquaredDistance(new Point(x, y)) < squaredRadis ? 255 : 0);
+                    element[x, y] = element.Origin.GetSquaredDistance(new Point(x, y)) < squaredRadis ? BinaryImage.BinaryPixel.black : BinaryImage.BinaryPixel.white;
                 }
             }
             return element;
