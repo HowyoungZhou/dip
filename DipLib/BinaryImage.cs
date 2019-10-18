@@ -187,6 +187,16 @@ namespace DipLib
             }
             return res;
         }
+
+        public BinaryImage Open(StructuringElement structElement)
+        {
+            return Erotion(structElement).Dilation(structElement);
+        }
+
+        public BinaryImage Close(StructuringElement structElement)
+        {
+            return Dilation(structElement).Erotion(structElement);
+        }
     }
 
     public class StructuringElement : BinaryImage
