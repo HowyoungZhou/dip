@@ -149,6 +149,19 @@ namespace DipLib
             return false;
         }
 
+        private bool IsCovered(StructuringElement structElement, Point originOnImage){
+            for (int dx = 0; dx < structElement.PixelWidth; dx++)
+            {
+                for (int dy = 0; dy < structElement.PixelHeight; dy++)
+                {
+                    Point point = originOnImage - structElement.Origin + new Point(dx, dy);
+                    if (!IsPointInImage(point)) continue;
+                    if (structElement[dx, dy] == 255 && this[point] != 255) return false;
+                }
+            }
+            return true;
+        }
+
         public BinaryImage Dilation(StructuringElement structElement)
         {
             var res = new BinaryImage(PixelWidth, PixelHeight);
@@ -157,6 +170,19 @@ namespace DipLib
                 for (int y = 0; y < PixelHeight; y++)
                 {
                     if (IsOverlap(structElement, new Point(x, y))) res[x, y] = 255;
+                }
+            }
+            return res;
+        }
+
+        public BinaryImage Erotion(StructuringElement structElement)
+        {
+            var res = new BinaryImage(PixelWidth, PixelHeight);
+            for (int x = 0; x < PixelWidth; x++)
+            {
+                for (int y = 0; y < PixelHeight; y++)
+                {
+                    if (IsCovered(structElement, new Point(x, y))) res[x, y] = 255;
                 }
             }
             return res;
