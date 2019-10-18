@@ -27,11 +27,11 @@ namespace DipWpf
         {
             DataContext = this;
 
-            var image = new BitmapImage(new Uri(@"F:\Coding\Dip\DipWpf\bin\Debug\netcoreapp3.0\sample.jpg"));
+            var image = new BitmapImage(new Uri(@"E:\sample.jpg"));
             var grayScale = new FormatConvertedBitmap(image, PixelFormats.Gray8, BitmapPalettes.Gray256, 0);
             byte[] pixels = new byte[grayScale.PixelWidth * grayScale.PixelHeight];
             grayScale.CopyPixels(pixels, grayScale.PixelWidth, 0);
-            var binaryImageData = new BinaryImage(pixels, grayScale.PixelWidth, grayScale.PixelHeight);
+            var binaryImageData = (!new BinaryImage(pixels, grayScale.PixelWidth, grayScale.PixelHeight)).Dilation(StructuringElements.Circle(2));
             CurrentImage = BitmapSource.Create(grayScale.PixelWidth, grayScale.PixelHeight, grayScale.DpiX, grayScale.DpiY, PixelFormats.Gray8, BitmapPalettes.Gray256, binaryImageData.ToPixelsData(), binaryImageData.PixelWidth);
             //CurrentImage = binaryImageData;
 
