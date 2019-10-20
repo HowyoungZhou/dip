@@ -249,12 +249,6 @@ namespace DipLib
         }
     }
 
-    public static class BinaryPixels
-    {
-        public static byte Black { get => 0; }
-        public static byte White { get => 255; }
-    }
-
     public struct Point
     {
         public int x;
