@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DipWpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Dip" Height="450" Width="800">
     
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Open" Executed="OpenImage"/>
@@ -14,6 +14,10 @@
         <CommandBinding Command="ApplicationCommands.Close" Executed="Exit"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.ConvertToGrayscale}" Executed="ConvertToGrayscale" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.Binarize}" Executed="Binarize" CanExecute="IsImageOpened"/>
+        <CommandBinding Command="{x:Static local:DipLibCommands.Dilation}" Executed="Dilation" CanExecute="IsImageOpened"/>
+        <CommandBinding Command="{x:Static local:DipLibCommands.Erotion}" Executed="Erotion" CanExecute="IsImageOpened"/>
+        <CommandBinding Command="{x:Static local:DipLibCommands.MorphologyOpen}" Executed="MorphologyOpen" CanExecute="IsImageOpened"/>
+        <CommandBinding Command="{x:Static local:DipLibCommands.MorphologyClose}" Executed="MorphologyClose" CanExecute="IsImageOpened"/>
     </Window.CommandBindings>
     
     <Grid>
@@ -34,10 +38,10 @@
                 <MenuItem Header="二值化(_B)" Command="{x:Static local:DipLibCommands.Binarize}"/>
             </MenuItem>
             <MenuItem Header="形态学(_M)">
-                <MenuItem Header="膨胀(_D)"/>
-                <MenuItem Header="腐蚀(_E)"/>
-                <MenuItem Header="开操作(_O)"/>
-                <MenuItem Header="闭操作(_C)"/>
+                <MenuItem Header="膨胀(_D)" Command="{x:Static local:DipLibCommands.Dilation}"/>
+                <MenuItem Header="腐蚀(_E)" Command="{x:Static local:DipLibCommands.Erotion}"/>
+                <MenuItem Header="开操作(_O)" Command="{x:Static local:DipLibCommands.MorphologyOpen}"/>
+                <MenuItem Header="闭操作(_C)" Command="{x:Static local:DipLibCommands.MorphologyClose}"/>
             </MenuItem>
         </Menu>
         <Image  Source="{Binding Path=ImageHelper.Image}" Grid.Row="1"/>

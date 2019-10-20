@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Text;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -16,6 +14,14 @@ namespace DipWpf
         public static RoutedCommand ConvertToGrayscale { get; } = new RoutedCommand();
 
         public static RoutedCommand Binarize { get; } = new RoutedCommand();
+
+        public static RoutedCommand Erotion { get; } = new RoutedCommand();
+
+        public static RoutedCommand Dilation { get; } = new RoutedCommand();
+
+        public static RoutedCommand MorphologyOpen { get; } = new RoutedCommand();
+
+        public static RoutedCommand MorphologyClose { get; } = new RoutedCommand();
     }
 
     public class ImageHelper : INotifyPropertyChanged
@@ -118,6 +124,13 @@ namespace DipWpf
         public void SaveAs()
         {
             var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PNG (*.png)|*.png|" +
+                                    "JPEG (*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi)|*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi|" +
+                                    "BMP (*.bmp;*.dib)|*.bmp;*.dib|" +
+                                    "GIF (*.gif)|*.gif|" +
+                                    "TIFF (*.tiff;*.tif)|*.tiff;*.tif|" +
+                                    "WMP (*.wmp)|*.wmp|" +
+                                    "所有文件 (*.*)|*.*";
             if (saveFileDialog.ShowDialog() != true) return;
             SaveImage(saveFileDialog.FileName);
             FileName = saveFileDialog.FileName;
@@ -135,8 +148,9 @@ namespace DipWpf
             NotifyPropertyChanged("Image");
         }
 
-        public void Binarize()
+        private void GetBinaryImage()
         {
+            if (BinaryImage != null) return;
             if (Grayscale == null)
             {
                 Grayscale = new FormatConvertedBitmap(Image, PixelFormats.Gray8, BitmapPalettes.Gray256, 0);
@@ -144,6 +158,39 @@ namespace DipWpf
             byte[] pixels = new byte[Grayscale.PixelWidth * Grayscale.PixelHeight];
             Grayscale.CopyPixels(pixels, Grayscale.PixelWidth, 0);
             BinaryImage = new BinaryImage(pixels, Grayscale.PixelWidth, Grayscale.PixelHeight);
+        }
+
+        public void Binarize()
+        {
+            GetBinaryImage();
+            RefreshBinaryImage();
+        }
+
+        public void Dilation()
+        {
+            GetBinaryImage();
+            BinaryImage = BinaryImage.Dilation(StructuringElements.Cross(3));
+            RefreshBinaryImage();
+        }
+
+        public void Erotion()
+        {
+            GetBinaryImage();
+            BinaryImage = BinaryImage.Erotion(StructuringElements.Cross(3));
+            RefreshBinaryImage();
+        }
+
+        public void MorphologyOpen()
+        {
+            GetBinaryImage();
+            BinaryImage = BinaryImage.Open(StructuringElements.Cross(3));
+            RefreshBinaryImage();
+        }
+
+        public void MorphologyClose()
+        {
+            GetBinaryImage();
+            BinaryImage = BinaryImage.Close(StructuringElements.Cross(3));
             RefreshBinaryImage();
         }
     }

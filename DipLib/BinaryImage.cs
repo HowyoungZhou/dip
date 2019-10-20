@@ -237,6 +237,16 @@ namespace DipLib
             }
             return element;
         }
+
+        public static StructuringElement Cross(int length)
+        {
+            var element = new StructuringElement(length, length, new Point(length / 2, length / 2));
+            for (int i = 0; i < length; i++)
+            {
+                element[i, length / 2] = element[length / 2, i] = BinaryImage.BinaryPixel.Black;
+            }
+            return element;
+        }
     }
 
     public static class BinaryPixels

@@ -1,43 +1,20 @@
-﻿using DipLib;
-using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.Win32;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DipWpf
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window,INotifyPropertyChanged
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         public ImageHelper ImageHelper { get; set; }
 
         public MainWindow()
         {
             DataContext = this;
-
-            // var image = new BitmapImage(new Uri(@"E:\sample3.jpg"));
-            // var grayScale = new FormatConvertedBitmap(image, PixelFormats.Gray8, BitmapPalettes.Gray256, 0);
-            // byte[] pixels = new byte[grayScale.PixelWidth * grayScale.PixelHeight];
-            // grayScale.CopyPixels(pixels, grayScale.PixelWidth, 0);
-            // //var binaryImageData = new BinaryImage(pixels, grayScale.PixelWidth, grayScale.PixelHeight);
-            // var binaryImageData = new BinaryImage(pixels, grayScale.PixelWidth, grayScale.PixelHeight).Close(StructuringElements.Circle(2));
-            // CurrentImage = BitmapSource.Create(grayScale.PixelWidth, grayScale.PixelHeight, grayScale.DpiX, grayScale.DpiY, PixelFormats.Gray8, BitmapPalettes.Gray256, binaryImageData.ToPixelsData(), binaryImageData.PixelWidth);
-            // //CurrentImage = image;
-
             InitializeComponent();
         }
 
@@ -51,6 +28,14 @@ namespace DipWpf
         private void OpenImage(object sender, ExecutedRoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "所有支持的格式|*.png;*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi;*.bmp;*.dib;*.gif;*.tiff;*.tif;*.wmp|"+
+                                    "PNG (*.png)|*.png|" +
+                                    "JPEG (*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi)|*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi|" +
+                                    "BMP (*.bmp;*.dib)|*.bmp;*.dib|" +
+                                    "GIF (*.gif)|*.gif|" +
+                                    "TIFF (*.tiff;*.tif)|*.tiff;*.tif|" +
+                                    "WMP (*.wmp)|*.wmp|" +
+                                    "所有文件 (*.*)|*.*";
             if (openFileDialog.ShowDialog() != true) return;
             ImageHelper = new ImageHelper(openFileDialog.FileName);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ImageHelper"));
@@ -76,8 +61,29 @@ namespace DipWpf
             ImageHelper.ConvertToGrayscale();
         }
 
-        private void Binarize(object sender, ExecutedRoutedEventArgs e){
+        private void Binarize(object sender, ExecutedRoutedEventArgs e)
+        {
             ImageHelper.Binarize();
+        }
+
+        public void Dilation(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.Dilation();
+        }
+
+        public void Erotion(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.Erotion();
+        }
+
+        public void MorphologyOpen(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.MorphologyOpen();
+        }
+
+        public void MorphologyClose(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.MorphologyClose();
         }
     }
 }
