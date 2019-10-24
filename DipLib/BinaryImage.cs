@@ -1,6 +1,6 @@
 namespace DipLib
 {
-    public class BinaryImage
+    public class BinaryImage : Image<BinaryImage.BinaryPixel>
     {
         public enum BinaryPixel
         {
@@ -8,50 +8,13 @@ namespace DipLib
             Black
         }
 
-        public int PixelHeight { get => Pixels.GetLength(1); }
+        public BinaryImage(int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight) { }
 
-        public int PixelWidth { get => Pixels.GetLength(0); }
+        public BinaryImage(BinaryPixel[,] pixels) : base(pixels) { }
 
-        public BinaryPixel this[int x, int y]
-        {
-            get
-            {
-                return Pixels[x, y];
-            }
-            set
-            {
-                Pixels[x, y] = value;
-            }
-        }
-
-        public BinaryPixel this[Point point]
-        {
-            get
-            {
-                return Pixels[point.x, point.y];
-            }
-            set
-            {
-                Pixels[point.x, point.y] = value;
-            }
-        }
-
-        public BinaryPixel[,] Pixels { get; set; }
-
-        public BinaryImage(int pixelWidth, int pixelHeight)
-        {
-            Pixels = new BinaryPixel[pixelWidth, pixelHeight];
-        }
-
-        public BinaryImage(BinaryPixel[,] pixels)
-        {
-            Pixels = pixels;
-        }
-
-        public BinaryImage(byte[] grayScalePixels, int pixelWidth, int pixelHeight)
+        public BinaryImage(byte[] grayScalePixels, int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight)
         {
             double threshold = GetThresholdByOtsu(grayScalePixels);
-            Pixels = new BinaryPixel[pixelWidth, pixelHeight];
             for (int x = 0; x < pixelWidth; x++)
             {
                 for (int y = 0; y < pixelHeight; y++)
@@ -137,7 +100,7 @@ namespace DipLib
 
         private bool IsPointInImage(Point point)
         {
-            return point.x > 0 && point.x < PixelWidth && point.y > 0 && point.y < PixelHeight;
+            return point.X > 0 && point.X < PixelWidth && point.Y > 0 && point.Y < PixelHeight;
         }
 
         private bool IsOverlap(StructuringElement structElement, Point originOnImage)
@@ -246,33 +209,6 @@ namespace DipLib
                 element[i, length / 2] = element[length / 2, i] = BinaryImage.BinaryPixel.Black;
             }
             return element;
-        }
-    }
-
-    public struct Point
-    {
-        public int x;
-        public int y;
-
-        public Point(int x = 0, int y = 0)
-        {
-            this.x = x;
-            this.y = y;
-        }
-
-        public static Point operator +(Point p1, Point p2)
-        {
-            return new Point(p1.x + p2.x, p1.y + p2.y);
-        }
-
-        public static Point operator -(Point p1, Point p2)
-        {
-            return new Point(p1.x - p2.x, p1.y - p2.y);
-        }
-
-        public int GetSquaredDistance(Point point)
-        {
-            return (x - point.x) * (x - point.x) + (y - point.y) * (y - point.y);
         }
     }
 }
