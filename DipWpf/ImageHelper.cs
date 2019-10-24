@@ -15,7 +15,7 @@ namespace DipWpf
 
         public static RoutedCommand Binarize { get; } = new RoutedCommand();
 
-        public static RoutedCommand Erotion { get; } = new RoutedCommand();
+        public static RoutedCommand Erosion { get; } = new RoutedCommand();
 
         public static RoutedCommand Dilation { get; } = new RoutedCommand();
 
@@ -173,10 +173,10 @@ namespace DipWpf
             RefreshBinaryImage();
         }
 
-        public void Erotion()
+        public void Erosion()
         {
             GetBinaryImage();
-            BinaryImage = BinaryImage.Erotion(StructuringElements.Cross(3));
+            BinaryImage = BinaryImage.Erosion(StructuringElements.Cross(3));
             RefreshBinaryImage();
         }
 

@@ -71,9 +71,9 @@ namespace DipWpf
             ImageHelper.Dilation();
         }
 
-        public void Erotion(object sender, ExecutedRoutedEventArgs e)
+        public void Erosion(object sender, ExecutedRoutedEventArgs e)
         {
-            ImageHelper.Erotion();
+            ImageHelper.Erosion();
         }
 
         public void MorphologyOpen(object sender, ExecutedRoutedEventArgs e)

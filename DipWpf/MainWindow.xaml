@@ -15,7 +15,7 @@
         <CommandBinding Command="{x:Static local:DipLibCommands.ConvertToGrayscale}" Executed="ConvertToGrayscale" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.Binarize}" Executed="Binarize" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.Dilation}" Executed="Dilation" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.Erotion}" Executed="Erotion" CanExecute="IsImageOpened"/>
+        <CommandBinding Command="{x:Static local:DipLibCommands.Erosion}" Executed="Erosion" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.MorphologyOpen}" Executed="MorphologyOpen" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.MorphologyClose}" Executed="MorphologyClose" CanExecute="IsImageOpened"/>
     </Window.CommandBindings>
@@ -39,7 +39,7 @@
             </MenuItem>
             <MenuItem Header="形态学(_M)">
                 <MenuItem Header="膨胀(_D)" Command="{x:Static local:DipLibCommands.Dilation}"/>
-                <MenuItem Header="腐蚀(_E)" Command="{x:Static local:DipLibCommands.Erotion}"/>
+                <MenuItem Header="腐蚀(_E)" Command="{x:Static local:DipLibCommands.Erosion}"/>
                 <MenuItem Header="开操作(_O)" Command="{x:Static local:DipLibCommands.MorphologyOpen}"/>
                 <MenuItem Header="闭操作(_C)" Command="{x:Static local:DipLibCommands.MorphologyClose}"/>
             </MenuItem>

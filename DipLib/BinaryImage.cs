@@ -145,7 +145,7 @@ namespace DipLib
             return res;
         }
 
-        public BinaryImage Erotion(StructuringElement structElement)
+        public BinaryImage Erosion(StructuringElement structElement)
         {
             var res = new BinaryImage(PixelWidth, PixelHeight);
             for (int x = 0; x < PixelWidth; x++)
@@ -160,12 +160,12 @@ namespace DipLib
 
         public BinaryImage Open(StructuringElement structElement)
         {
-            return Erotion(structElement).Dilation(structElement);
+            return Erosion(structElement).Dilation(structElement);
         }
 
         public BinaryImage Close(StructuringElement structElement)
         {
-            return Dilation(structElement).Erotion(structElement);
+            return Dilation(structElement).Erosion(structElement);
         }
     }
 
@@ -190,12 +190,12 @@ namespace DipLib
         {
             var origin = new Point(radius, radius);
             var element = new StructuringElement(radius * 2, radius * 2, origin);
-            int squaredRadis = radius * radius;
+            int squaredRadius = radius * radius;
             for (int x = 0; x < element.PixelWidth; x++)
             {
                 for (int y = 0; y < element.PixelHeight; y++)
                 {
-                    element[x, y] = element.Origin.GetSquaredDistance(new Point(x, y)) < squaredRadis ? BinaryImage.BinaryPixel.Black : BinaryImage.BinaryPixel.White;
+                    element[x, y] = element.Origin.GetSquaredDistance(new Point(x, y)) < squaredRadius ? BinaryImage.BinaryPixel.Black : BinaryImage.BinaryPixel.White;
                 }
             }
             return element;
