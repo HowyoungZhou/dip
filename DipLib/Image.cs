@@ -1,6 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
+
 namespace DipLib
 {
-    public abstract class Image<T>
+    public abstract class Image<T> : IEnumerable<T>
     {
         public int PixelHeight { get => Pixels.GetLength(1); }
 
@@ -32,6 +35,8 @@ namespace DipLib
 
         public T[,] Pixels { get; set; }
 
+        public delegate T Process(T pixel);
+
         public Image(int pixelWidth, int pixelHeight)
         {
             Pixels = new T[pixelWidth, pixelHeight];
@@ -40,6 +45,33 @@ namespace DipLib
         public Image(T[,] pixels)
         {
             Pixels = pixels;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (int y = 0; y < PixelHeight; y++)
+            {
+                for (int x = 0; x < PixelWidth; x++)
+                {
+                    yield return Pixels[x, y];
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void Pipeline(Process process)
+        {
+            for (int y = 0; y < PixelHeight; y++)
+            {
+                for (int x = 0; x < PixelWidth; x++)
+                {
+                    Pixels[x, y] = process(Pixels[x, y]);
+                }
+            }
         }
     }
 
