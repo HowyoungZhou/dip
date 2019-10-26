@@ -1,3 +1,6 @@
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+
 namespace DipLib
 {
     public class BinaryImage : Image<BinaryImage.BinaryPixel>
@@ -166,6 +169,11 @@ namespace DipLib
         public BinaryImage Close(StructuringElement structElement)
         {
             return Dilation(structElement).Erosion(structElement);
+        }
+
+        public override BitmapSource ToBitmapSource(double dpiX, double dpiY)
+        {
+            return BitmapSource.Create(PixelWidth, PixelHeight, dpiX, dpiY, PixelFormats.Gray8, BitmapPalettes.Gray256, ToPixelsData(), PixelWidth);
         }
     }
 

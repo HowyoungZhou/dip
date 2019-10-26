@@ -1,9 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Windows.Media.Imaging;
 
 namespace DipLib
 {
-    public abstract class Image<T> : IEnumerable<T>
+    public interface IBitmapSource
+    {
+        public int PixelHeight { get; }
+
+        public int PixelWidth { get; }
+
+        public BitmapSource ToBitmapSource(double dpiX, double dpiY);
+    }
+
+    public abstract class Image<T> : IEnumerable<T>, IBitmapSource
     {
         public int PixelHeight { get => Pixels.GetLength(1); }
 
@@ -73,6 +83,8 @@ namespace DipLib
                 }
             }
         }
+
+        public abstract BitmapSource ToBitmapSource(double dpiX, double dpiY);
     }
 
     public struct Point

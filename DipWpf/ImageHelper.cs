@@ -40,16 +40,20 @@ namespace DipWpf
 
         public BitmapSource Image { get; set; }
 
-        public BitmapSource Grayscale { get; set; }
+        // public BitmapSource Grayscale { get; set; }
 
-        public BinaryImage BinaryImage { get; set; }
+        // public BinaryImage BinaryImage { get; set; }
+
+        public BitmapImage OriginImage { get; set; }
+
+        public IBitmapSource DipLibImage { get; set; }
 
         public string FileName { get; private set; }
 
         public ImageHelper(string fileName)
         {
             FileName = fileName;
-            Image = new BitmapImage(new Uri(fileName));
+            Image = OriginImage = new BitmapImage(new Uri(fileName));
         }
 
         private void NotifyPropertyChanged(String name)
@@ -136,62 +140,66 @@ namespace DipWpf
             FileName = saveFileDialog.FileName;
         }
 
+        private void GetGrayscaleImage()
+        {
+            Image = new FormatConvertedBitmap(OriginImage, PixelFormats.Gray8, BitmapPalettes.Gray256, 0);
+            byte[] pixels = new byte[Image.PixelWidth * Image.PixelHeight];
+            Image.CopyPixels(pixels, Image.PixelWidth, 0);
+            DipLibImage = new GrayscaleImage(pixels, Image.PixelWidth, Image.PixelHeight);
+        }
+
         public void ConvertToGrayscale()
         {
-            Grayscale = Image = new FormatConvertedBitmap(Image, PixelFormats.Gray8, BitmapPalettes.Gray256, 0);
+            GetGrayscaleImage();
             NotifyPropertyChanged("Image");
         }
 
-        private void RefreshBinaryImage()
+        private void RefreshImage()
         {
-            Image = BitmapSource.Create(Image.PixelWidth, Image.PixelHeight, Image.DpiX, Image.DpiY, PixelFormats.Gray8, BitmapPalettes.Gray256, BinaryImage.ToPixelsData(), BinaryImage.PixelWidth);
+            Image = DipLibImage.ToBitmapSource(Image.DpiX, Image.DpiY);
             NotifyPropertyChanged("Image");
         }
 
         private void GetBinaryImage()
         {
-            if (BinaryImage != null) return;
-            if (Grayscale == null)
-            {
-                Grayscale = new FormatConvertedBitmap(Image, PixelFormats.Gray8, BitmapPalettes.Gray256, 0);
-            }
-            byte[] pixels = new byte[Grayscale.PixelWidth * Grayscale.PixelHeight];
-            Grayscale.CopyPixels(pixels, Grayscale.PixelWidth, 0);
-            BinaryImage = new BinaryImage(pixels, Grayscale.PixelWidth, Grayscale.PixelHeight);
+            if (DipLibImage is BinaryImage) return;
+            if (!(DipLibImage is GrayscaleImage)) GetGrayscaleImage();
+            var grayscale = DipLibImage as GrayscaleImage;
+            DipLibImage = new BinaryImage(grayscale.ToPixelsData(), grayscale.PixelWidth, grayscale.PixelHeight);
         }
 
         public void Binarize()
         {
             GetBinaryImage();
-            RefreshBinaryImage();
+            RefreshImage();
         }
 
         public void Dilation()
         {
             GetBinaryImage();
-            BinaryImage = BinaryImage.Dilation(StructuringElements.Cross(3));
-            RefreshBinaryImage();
+            DipLibImage = (DipLibImage as BinaryImage).Dilation(StructuringElements.Cross(3));
+            RefreshImage();
         }
 
         public void Erosion()
         {
             GetBinaryImage();
-            BinaryImage = BinaryImage.Erosion(StructuringElements.Cross(3));
-            RefreshBinaryImage();
+            DipLibImage = (DipLibImage as BinaryImage).Erosion(StructuringElements.Cross(3));
+            RefreshImage();
         }
 
         public void MorphologyOpen()
         {
             GetBinaryImage();
-            BinaryImage = BinaryImage.Open(StructuringElements.Cross(3));
-            RefreshBinaryImage();
+            DipLibImage = (DipLibImage as BinaryImage).Open(StructuringElements.Cross(3));
+            RefreshImage();
         }
 
         public void MorphologyClose()
         {
             GetBinaryImage();
-            BinaryImage = BinaryImage.Close(StructuringElements.Cross(3));
-            RefreshBinaryImage();
+            DipLibImage = (DipLibImage as BinaryImage).Close(StructuringElements.Cross(3));
+            RefreshImage();
         }
     }
 }
