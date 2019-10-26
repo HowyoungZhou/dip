@@ -90,5 +90,10 @@ namespace DipWpf
         {
             ImageHelper.GrayscaleEnhanceVisibility();
         }
+
+        public void GrayscaleHistogramEqualization(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.GrayscaleHistogramEqualization();
+        }
     }
 }

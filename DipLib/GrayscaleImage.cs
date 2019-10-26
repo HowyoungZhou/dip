@@ -38,6 +38,47 @@ namespace DipLib
             Pipeline((pixel) => Convert.ToByte(255 * Math.Log10(pixel / 255.0 + 1) / logMax));
         }
 
+        private long[] GetHistogram()
+        {
+            var res = new long[256];
+            foreach (var pixel in this)
+            {
+                res[pixel]++;
+            }
+            return res;
+        }
+
+        private long[] GetHistogramCDF()
+        {
+            var histogram = GetHistogram();
+            var res = new long[256];
+            long sum = 0;
+            for (int i = 0; i < 256; i++)
+            {
+                res[i] = histogram[i] + sum;
+                sum += histogram[i];
+            }
+            return res;
+        }
+
+        private long GetMinCDF(long[] cdf)
+        {
+            long min = 0;
+            foreach (long value in cdf)
+            {
+                if (value < min) min = value;
+            }
+            return min;
+        }
+
+        public void HistogramEqualization()
+        {
+            var cdf = GetHistogramCDF();
+            var minCDF = GetMinCDF(cdf);
+            double denominator = PixelWidth * PixelHeight - minCDF;
+            Pipeline((pixel) => Convert.ToByte(Math.Round((cdf[pixel] - minCDF) / denominator * 255)));
+        }
+
         public byte[] ToPixelsData()
         {
             byte[] data = new byte[PixelHeight * PixelWidth];

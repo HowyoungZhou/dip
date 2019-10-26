@@ -24,6 +24,8 @@ namespace DipWpf
         public static RoutedCommand MorphologyClose { get; } = new RoutedCommand();
 
         public static RoutedCommand GrayscaleEnhanceVisibility { get; } = new RoutedCommand();
+        
+        public static RoutedCommand GrayscaleHistogramEqualization { get; } = new RoutedCommand();
     }
 
     public partial class ImageHelper : INotifyPropertyChanged

@@ -19,7 +19,7 @@
         <CommandBinding Command="{x:Static local:DipLibCommands.MorphologyOpen}" Executed="MorphologyOpen" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.MorphologyClose}" Executed="MorphologyClose" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.GrayscaleEnhanceVisibility}" Executed="GrayscaleEnhanceVisibility" CanExecute="IsImageOpened"/>
-        
+        <CommandBinding Command="{x:Static local:DipLibCommands.GrayscaleHistogramEqualization}" Executed="GrayscaleHistogramEqualization" CanExecute="IsImageOpened"/>
     </Window.CommandBindings>
     
     <Grid>
@@ -47,7 +47,7 @@
             </MenuItem>
             <MenuItem Header="灰度(_G)">
                 <MenuItem Header="亮度增强(_V)" Command="{x:Static local:DipLibCommands.GrayscaleEnhanceVisibility}"/>
-                <MenuItem Header="直方图均衡化(_H)" Command=""/>
+                <MenuItem Header="直方图均衡化(_H)" Command="{x:Static local:DipLibCommands.GrayscaleHistogramEqualization}"/>
             </MenuItem>
         </Menu>
         <Image  Source="{Binding Path=ImageHelper.Image}" Grid.Row="1"/>

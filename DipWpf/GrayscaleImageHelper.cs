@@ -26,5 +26,11 @@ namespace DipWpf
             (DipLibImage as GrayscaleImage).EnhanceVisibility();
             RefreshImage();
         }
+
+        public void GrayscaleHistogramEqualization(){
+            GetGrayscaleImage();
+            (DipLibImage as GrayscaleImage).HistogramEqualization();
+            RefreshImage();
+        }
     }
 }
