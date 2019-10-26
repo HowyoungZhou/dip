@@ -22,9 +22,11 @@ namespace DipWpf
         public static RoutedCommand MorphologyOpen { get; } = new RoutedCommand();
 
         public static RoutedCommand MorphologyClose { get; } = new RoutedCommand();
+
+        public static RoutedCommand GrayscaleEnhanceVisibility { get; } = new RoutedCommand();
     }
 
-    public class ImageHelper : INotifyPropertyChanged
+    public partial class ImageHelper : INotifyPropertyChanged
     {
         public enum FileType
         {
@@ -39,10 +41,6 @@ namespace DipWpf
         public event PropertyChangedEventHandler PropertyChanged;
 
         public BitmapSource Image { get; set; }
-
-        // public BitmapSource Grayscale { get; set; }
-
-        // public BinaryImage BinaryImage { get; set; }
 
         public BitmapImage OriginImage { get; set; }
 
@@ -140,66 +138,10 @@ namespace DipWpf
             FileName = saveFileDialog.FileName;
         }
 
-        private void GetGrayscaleImage()
-        {
-            Image = new FormatConvertedBitmap(OriginImage, PixelFormats.Gray8, BitmapPalettes.Gray256, 0);
-            byte[] pixels = new byte[Image.PixelWidth * Image.PixelHeight];
-            Image.CopyPixels(pixels, Image.PixelWidth, 0);
-            DipLibImage = new GrayscaleImage(pixels, Image.PixelWidth, Image.PixelHeight);
-        }
-
-        public void ConvertToGrayscale()
-        {
-            GetGrayscaleImage();
-            NotifyPropertyChanged("Image");
-        }
-
         private void RefreshImage()
         {
             Image = DipLibImage.ToBitmapSource(Image.DpiX, Image.DpiY);
             NotifyPropertyChanged("Image");
-        }
-
-        private void GetBinaryImage()
-        {
-            if (DipLibImage is BinaryImage) return;
-            if (!(DipLibImage is GrayscaleImage)) GetGrayscaleImage();
-            var grayscale = DipLibImage as GrayscaleImage;
-            DipLibImage = new BinaryImage(grayscale.ToPixelsData(), grayscale.PixelWidth, grayscale.PixelHeight);
-        }
-
-        public void Binarize()
-        {
-            GetBinaryImage();
-            RefreshImage();
-        }
-
-        public void Dilation()
-        {
-            GetBinaryImage();
-            DipLibImage = (DipLibImage as BinaryImage).Dilation(StructuringElements.Cross(3));
-            RefreshImage();
-        }
-
-        public void Erosion()
-        {
-            GetBinaryImage();
-            DipLibImage = (DipLibImage as BinaryImage).Erosion(StructuringElements.Cross(3));
-            RefreshImage();
-        }
-
-        public void MorphologyOpen()
-        {
-            GetBinaryImage();
-            DipLibImage = (DipLibImage as BinaryImage).Open(StructuringElements.Cross(3));
-            RefreshImage();
-        }
-
-        public void MorphologyClose()
-        {
-            GetBinaryImage();
-            DipLibImage = (DipLibImage as BinaryImage).Close(StructuringElements.Cross(3));
-            RefreshImage();
         }
     }
 }

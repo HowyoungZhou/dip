@@ -85,5 +85,10 @@ namespace DipWpf
         {
             ImageHelper.MorphologyClose();
         }
+
+        public void GrayscaleEnhanceVisibility(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.GrayscaleEnhanceVisibility();
+        }
     }
 }

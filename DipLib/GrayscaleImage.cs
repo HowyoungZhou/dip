@@ -34,8 +34,8 @@ namespace DipLib
 
         public void EnhanceVisibility()
         {
-            double logMax = Math.Log10(GetMaxLuminance() + 1);
-            Pipeline((pixel) => Convert.ToByte(Math.Log10(pixel + 1) / logMax));
+            double logMax = Math.Log10(GetMaxLuminance() / 255.0 + 1);
+            Pipeline((pixel) => Convert.ToByte(255 * Math.Log10(pixel / 255.0 + 1) / logMax));
         }
 
         public byte[] ToPixelsData()
