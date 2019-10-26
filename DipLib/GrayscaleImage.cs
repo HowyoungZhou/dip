@@ -32,10 +32,24 @@ namespace DipLib
             return max;
         }
 
+        private byte GetMinLuminance()
+        {
+            byte min = 255;
+            foreach (var pixel in this)
+            {
+                if (pixel < min) min = pixel;
+
+            }
+            return min;
+        }
+
         public void EnhanceVisibility()
         {
             double logMax = Math.Log10(GetMaxLuminance() / 255.0 + 1);
             Pipeline((pixel) => Convert.ToByte(255 * Math.Log10(pixel / 255.0 + 1) / logMax));
+            byte min = GetMinLuminance();
+            double k = 255.0 / (GetMaxLuminance() - min);
+            Pipeline((pixel) => Convert.ToByte(k * (pixel - min)));
         }
 
         private long[] GetHistogram()
@@ -61,20 +75,10 @@ namespace DipLib
             return res;
         }
 
-        private long GetMinCDF(long[] cdf)
-        {
-            long min = 0;
-            foreach (long value in cdf)
-            {
-                if (value < min) min = value;
-            }
-            return min;
-        }
-
         public void HistogramEqualization()
         {
             var cdf = GetHistogramCDF();
-            var minCDF = GetMinCDF(cdf);
+            var minCDF = cdf.GetMin();
             double denominator = PixelWidth * PixelHeight - minCDF;
             Pipeline((pixel) => Convert.ToByte(Math.Round((cdf[pixel] - minCDF) / denominator * 255)));
         }
