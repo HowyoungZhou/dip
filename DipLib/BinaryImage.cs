@@ -3,14 +3,8 @@ using System.Windows.Media.Imaging;
 
 namespace DipLib
 {
-    public class BinaryImage : Image<BinaryImage.BinaryPixel>
+    public class BinaryImage : Image<BinaryPixel>
     {
-        public enum BinaryPixel
-        {
-            White,
-            Black
-        }
-
         public BinaryImage(int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight) { }
 
         public BinaryImage(BinaryPixel[,] pixels) : base(pixels) { }
@@ -203,7 +197,7 @@ namespace DipLib
             {
                 for (int y = 0; y < element.PixelHeight; y++)
                 {
-                    element[x, y] = element.Origin.GetSquaredDistance(new Point(x, y)) < squaredRadius ? BinaryImage.BinaryPixel.Black : BinaryImage.BinaryPixel.White;
+                    element[x, y] = element.Origin.GetSquaredDistance(new Point(x, y)) < squaredRadius ? BinaryPixel.Black : BinaryPixel.White;
                 }
             }
             return element;
@@ -214,7 +208,7 @@ namespace DipLib
             var element = new StructuringElement(length, length, new Point(length / 2, length / 2));
             for (int i = 0; i < length; i++)
             {
-                element[i, length / 2] = element[length / 2, i] = BinaryImage.BinaryPixel.Black;
+                element[i, length / 2] = element[length / 2, i] = BinaryPixel.Black;
             }
             return element;
         }

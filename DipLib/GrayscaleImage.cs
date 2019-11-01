@@ -10,13 +10,13 @@ namespace DipLib
 
         public GrayscaleImage(int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight) { }
 
-        public GrayscaleImage(byte[] grayScalePixels, int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight)
+        public GrayscaleImage(byte[] grayscalePixels, int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight)
         {
             for (int x = 0; x < pixelWidth; x++)
             {
                 for (int y = 0; y < pixelHeight; y++)
                 {
-                    Pixels[x, y] = grayScalePixels[y * pixelWidth + x];
+                    Pixels[x, y] = grayscalePixels[y * pixelWidth + x];
                 }
             }
         }
