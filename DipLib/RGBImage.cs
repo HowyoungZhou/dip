@@ -10,14 +10,19 @@ namespace DipLib
 
         public RGBImage(int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight) { }
 
-        public RGBImage(byte[] brgaPixels, int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight)
+        public RGBImage(byte[] bgraPixels, int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight)
         {
             for (int x = 0; x < pixelWidth; x++)
             {
                 for (int y = 0; y < pixelHeight; y++)
                 {
                     int offset = y * PixelWidth * 4 + x * 4;
-                    Pixels[x, y] = new RGBPixel(brgaPixels[offset], brgaPixels[offset + 1], brgaPixels[offset + 2], brgaPixels[offset + 3]);
+
+                    // offset + 0: B
+                    // offset + 1: G
+                    // offset + 2: R
+                    // offset + 3: A
+                    Pixels[x, y] = new RGBPixel(bgraPixels[offset + 2], bgraPixels[offset + 1], bgraPixels[offset + 0], bgraPixels[offset + 3]);
                 }
             }
         }
@@ -49,8 +54,8 @@ namespace DipLib
                     var pixel = Pixels[x, y];
                     int offset = y * PixelWidth * 4 + x * 4;
                     data[offset] = pixel.B;
-                    data[offset + 1] = pixel.R;
-                    data[offset + 2] = pixel.G;
+                    data[offset + 1] = pixel.G;
+                    data[offset + 2] = pixel.R;
                     data[offset + 3] = pixel.A;
                 }
             }
