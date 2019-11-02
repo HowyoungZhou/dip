@@ -41,7 +41,8 @@ namespace DipWpf
             RefreshImage();
         }
 
-        public void LightnessLinearStretch(){
+        public void LightnessLinearStretch()
+        {
             if (DipLibImage is GrayscaleImage) (DipLibImage as GrayscaleImage).LightnessLinearStretch();
             else
             {
@@ -51,10 +52,24 @@ namespace DipWpf
             RefreshImage();
         }
 
-        public void HistogramEqualization()
+        public void GrayscaleHistogramEqualization()
         {
             GetGrayscaleImage();
             (DipLibImage as GrayscaleImage).HistogramEqualization();
+            RefreshImage();
+        }
+
+        public void SaturationHistogramEqualization()
+        {
+            GetRGBImage();
+            (DipLibImage as RGBImage).SaturationHistogramEqualization(101);
+            RefreshImage();
+        }
+
+        public void LightnessHistogramEqualization()
+        {
+            GetRGBImage();
+            (DipLibImage as RGBImage).LightnessHistogramEqualization(101);
             RefreshImage();
         }
     }

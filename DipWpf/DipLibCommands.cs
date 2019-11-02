@@ -18,7 +18,11 @@ namespace DipWpf
 
         public static RoutedCommand EnhanceVisibility { get; } = new RoutedCommand();
 
-        public static RoutedCommand HistogramEqualization { get; } = new RoutedCommand();
+        public static RoutedCommand GrayscaleHistogramEqualization { get; } = new RoutedCommand();
+
+        public static RoutedCommand LightnessHistogramEqualization { get; } = new RoutedCommand();
+
+        public static RoutedCommand SaturationHistogramEqualization { get; } = new RoutedCommand();
 
         public static RoutedCommand LightnessLinearStretch { get; } = new RoutedCommand();
     }

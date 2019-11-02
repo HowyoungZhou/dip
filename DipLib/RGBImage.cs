@@ -74,6 +74,82 @@ namespace DipLib
             });
         }
 
+        private long[] GetHistogramOfSaturation(int levels)
+        {
+            var res = new long[levels];
+            foreach (var pixel in this)
+            {
+                int level = (int)Math.Round(pixel.ToHSL().S * (levels - 1));
+                res[level]++;
+            }
+            return res;
+        }
+
+        private long[] GetHistogramCDFOfSaturation(int levels)
+        {
+            var histogram = GetHistogramOfSaturation(levels);
+            var res = new long[levels];
+            long sum = 0;
+            for (int i = 0; i < levels; i++)
+            {
+                res[i] = histogram[i] + sum;
+                sum += histogram[i];
+            }
+            return res;
+        }
+
+        public void SaturationHistogramEqualization(int levels)
+        {
+            var cdf = GetHistogramCDFOfSaturation(levels);
+            var minCDF = cdf.GetMin();
+            double denominator = PixelWidth * PixelHeight - minCDF;
+            Pipeline((pixel) =>
+            {
+                var hsl = pixel.ToHSL();
+                int level = (int)Math.Round(hsl.S * (levels - 1));
+                hsl.S = Convert.ToSingle((cdf[level] - minCDF) / denominator);
+                return hsl.ToRGB();
+            });
+        }
+
+        private long[] GetHistogramOfLightness(int levels)
+        {
+            var res = new long[levels];
+            foreach (var pixel in this)
+            {
+                int level = (int)Math.Round(pixel.ToHSL().L * (levels - 1));
+                res[level]++;
+            }
+            return res;
+        }
+
+        private long[] GetHistogramCDFOfLightness(int levels)
+        {
+            var histogram = GetHistogramOfLightness(levels);
+            var res = new long[levels];
+            long sum = 0;
+            for (int i = 0; i < levels; i++)
+            {
+                res[i] = histogram[i] + sum;
+                sum += histogram[i];
+            }
+            return res;
+        }
+
+        public void LightnessHistogramEqualization(int levels)
+        {
+            var cdf = GetHistogramCDFOfLightness(levels);
+            var minCDF = cdf.GetMin();
+            double denominator = PixelWidth * PixelHeight - minCDF;
+            Pipeline((pixel) =>
+            {
+                var hsl = pixel.ToHSL();
+                int level = (int)Math.Round(hsl.L * (levels - 1));
+                hsl.L = Convert.ToSingle((cdf[level] - minCDF) / denominator);
+                return hsl.ToRGB();
+            });
+        }
+
         public byte[] ToBrgaPixelsData()
         {
             byte[] data = new byte[PixelHeight * PixelWidth * 4];

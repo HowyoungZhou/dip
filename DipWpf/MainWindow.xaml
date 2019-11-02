@@ -19,7 +19,9 @@
         <CommandBinding Command="{x:Static local:DipLibCommands.MorphologyOpen}" Executed="MorphologyOpen" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.MorphologyClose}" Executed="MorphologyClose" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.EnhanceVisibility}" Executed="EnhanceVisibility" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.HistogramEqualization}" Executed="HistogramEqualization" CanExecute="IsImageOpened"/>
+        <CommandBinding Command="{x:Static local:DipLibCommands.GrayscaleHistogramEqualization}" Executed="GrayscaleHistogramEqualization" CanExecute="IsImageOpened"/>
+        <CommandBinding Command="{x:Static local:DipLibCommands.SaturationHistogramEqualization}" Executed="SaturationHistogramEqualization" CanExecute="IsImageOpened"/>
+        <CommandBinding Command="{x:Static local:DipLibCommands.LightnessHistogramEqualization}" Executed="LightnessHistogramEqualization" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.LightnessLinearStretch}" Executed="LightnessLinearStretch" CanExecute="IsImageOpened"/>
     </Window.CommandBindings>
     
@@ -49,7 +51,11 @@
             <MenuItem Header="可见度(_V)">
                 <MenuItem Header="亮度增强(_L)" Command="{x:Static local:DipLibCommands.EnhanceVisibility}"/>
                 <MenuItem Header="亮度线性拉伸(_S)" Command="{x:Static local:DipLibCommands.LightnessLinearStretch}"/>
-                <MenuItem Header="直方图均衡化(_H)" Command="{x:Static local:DipLibCommands.HistogramEqualization}"/>
+                <MenuItem Header="直方图均衡化(_H)">
+                    <MenuItem Header="灰度(_G)" Command="{x:Static local:DipLibCommands.GrayscaleHistogramEqualization}"/>
+                    <MenuItem Header="亮度(_L)" Command="{x:Static local:DipLibCommands.LightnessHistogramEqualization}"/>
+                    <MenuItem Header="饱和度(_S)" Command="{x:Static local:DipLibCommands.SaturationHistogramEqualization}"/>
+                </MenuItem>
             </MenuItem>
         </Menu>
         <Image  Source="{Binding Path=ImageHelper.Image}" Grid.Row="1"/>

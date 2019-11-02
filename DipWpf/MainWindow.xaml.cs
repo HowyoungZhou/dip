@@ -91,10 +91,21 @@ namespace DipWpf
             ImageHelper.EnhanceVisibility();
         }
 
-        public void HistogramEqualization(object sender, ExecutedRoutedEventArgs e)
+        public void GrayscaleHistogramEqualization(object sender, ExecutedRoutedEventArgs e)
         {
-            ImageHelper.HistogramEqualization();
+            ImageHelper.GrayscaleHistogramEqualization();
         }
+
+        public void SaturationHistogramEqualization(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.SaturationHistogramEqualization();
+        }
+
+        public void LightnessHistogramEqualization(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.LightnessHistogramEqualization();
+        }
+
 
         public void LightnessLinearStretch(object sender, ExecutedRoutedEventArgs e)
         {
