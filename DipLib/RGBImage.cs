@@ -27,22 +27,28 @@ namespace DipLib
             }
         }
 
-        // private byte GetMaxLuminance()
-        // {
-        //     byte max = 0;
-        //     foreach (var pixel in this)
-        //     {
-        //         if (pixel > max) max = pixel;
+        private float GetMaxLuminance()
+        {
+            float max = 0;
+            foreach (var pixel in this)
+            {
+                float l = pixel.ToHSL().L;
+                if (l > max) max = l;
 
-        //     }
-        //     return max;
-        // }
+            }
+            return max;
+        }
 
-        // public void EnhanceVisibility()
-        // {
-        //     double logMax = Math.Log10(GetMaxLuminance() / 255.0 + 1);
-        //     Pipeline((pixel) => Convert.ToByte(255 * Math.Log10(pixel / 255.0 + 1) / logMax));
-        // }
+        public void EnhanceVisibility()
+        {
+            double logMax = Math.Log10(GetMaxLuminance() + 1);
+            Pipeline((pixel) =>
+            {
+                var hsl = pixel.ToHSL();
+                hsl.L = Convert.ToSingle(Math.Log10(hsl.L + 1) / logMax);
+                return hsl.ToRGB();
+            });
+        }
 
         public byte[] ToBrgaPixelsData()
         {

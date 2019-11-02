@@ -26,7 +26,7 @@ namespace DipLib
             A = a;
         }
 
-        public HSLPixel ToHSV()
+        public HSLPixel ToHSL()
         {
             float r = R / 255f, g = G / 255f, b = B / 255f;
             float min = Math.Min(r, Math.Min(g, b));

@@ -86,14 +86,14 @@ namespace DipWpf
             ImageHelper.MorphologyClose();
         }
 
-        public void GrayscaleEnhanceVisibility(object sender, ExecutedRoutedEventArgs e)
+        public void EnhanceVisibility(object sender, ExecutedRoutedEventArgs e)
         {
-            ImageHelper.GrayscaleEnhanceVisibility();
+            ImageHelper.EnhanceVisibility();
         }
 
-        public void GrayscaleHistogramEqualization(object sender, ExecutedRoutedEventArgs e)
+        public void HistogramEqualization(object sender, ExecutedRoutedEventArgs e)
         {
-            ImageHelper.GrayscaleHistogramEqualization();
+            ImageHelper.HistogramEqualization();
         }
     }
 }
