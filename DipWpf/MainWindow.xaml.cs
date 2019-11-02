@@ -28,7 +28,7 @@ namespace DipWpf
         private void OpenImage(object sender, ExecutedRoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "所有支持的格式|*.png;*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi;*.bmp;*.dib;*.gif;*.tiff;*.tif;*.wmp|"+
+            openFileDialog.Filter = "所有支持的格式|*.png;*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi;*.bmp;*.dib;*.gif;*.tiff;*.tif;*.wmp|" +
                                     "PNG (*.png)|*.png|" +
                                     "JPEG (*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi)|*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi|" +
                                     "BMP (*.bmp;*.dib)|*.bmp;*.dib|" +
@@ -94,6 +94,11 @@ namespace DipWpf
         public void HistogramEqualization(object sender, ExecutedRoutedEventArgs e)
         {
             ImageHelper.HistogramEqualization();
+        }
+
+        public void LightnessLinearStretch(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.LightnessLinearStretch();
         }
     }
 }

@@ -39,6 +39,18 @@ namespace DipLib
             return max;
         }
 
+        private float GetMinLuminance()
+        {
+            float min = 1;
+            foreach (var pixel in this)
+            {
+                float l = pixel.ToHSL().L;
+                if (l < min) min = l;
+
+            }
+            return min;
+        }
+
         public void EnhanceVisibility()
         {
             double logMax = Math.Log10(GetMaxLuminance() + 1);
@@ -46,6 +58,18 @@ namespace DipLib
             {
                 var hsl = pixel.ToHSL();
                 hsl.L = Convert.ToSingle(Math.Log10(hsl.L + 1) / logMax);
+                return hsl.ToRGB();
+            });
+        }
+
+        public void LightnessLinearStretch()
+        {
+            float min = GetMinLuminance();
+            float k = GetMaxLuminance() - min;
+            Pipeline((pixel) =>
+            {
+                var hsl = pixel.ToHSL();
+                hsl.L = (hsl.L - min) / k;
                 return hsl.ToRGB();
             });
         }

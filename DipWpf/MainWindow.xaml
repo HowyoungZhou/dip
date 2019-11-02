@@ -20,6 +20,7 @@
         <CommandBinding Command="{x:Static local:DipLibCommands.MorphologyClose}" Executed="MorphologyClose" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.EnhanceVisibility}" Executed="EnhanceVisibility" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.HistogramEqualization}" Executed="HistogramEqualization" CanExecute="IsImageOpened"/>
+        <CommandBinding Command="{x:Static local:DipLibCommands.LightnessLinearStretch}" Executed="LightnessLinearStretch" CanExecute="IsImageOpened"/>
     </Window.CommandBindings>
     
     <Grid>
@@ -47,6 +48,7 @@
             </MenuItem>
             <MenuItem Header="可见度(_V)">
                 <MenuItem Header="亮度增强(_L)" Command="{x:Static local:DipLibCommands.EnhanceVisibility}"/>
+                <MenuItem Header="亮度线性拉伸(_S)" Command="{x:Static local:DipLibCommands.LightnessLinearStretch}"/>
                 <MenuItem Header="直方图均衡化(_H)" Command="{x:Static local:DipLibCommands.HistogramEqualization}"/>
             </MenuItem>
         </Menu>

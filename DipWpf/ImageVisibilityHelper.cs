@@ -41,6 +41,16 @@ namespace DipWpf
             RefreshImage();
         }
 
+        public void LightnessLinearStretch(){
+            if (DipLibImage is GrayscaleImage) (DipLibImage as GrayscaleImage).LightnessLinearStretch();
+            else
+            {
+                if (!(DipLibImage is RGBImage)) GetRGBImage();
+                (DipLibImage as RGBImage).LightnessLinearStretch();
+            }
+            RefreshImage();
+        }
+
         public void HistogramEqualization()
         {
             GetGrayscaleImage();

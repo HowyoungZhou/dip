@@ -47,6 +47,10 @@ namespace DipLib
         {
             double logMax = Math.Log10(GetMaxLuminance() / 255.0 + 1);
             Pipeline((pixel) => Convert.ToByte(255 * Math.Log10(pixel / 255.0 + 1) / logMax));
+        }
+
+        public void LightnessLinearStretch()
+        {
             byte min = GetMinLuminance();
             double k = 255.0 / (GetMaxLuminance() - min);
             Pipeline((pixel) => Convert.ToByte(k * (pixel - min)));
