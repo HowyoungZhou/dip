@@ -106,10 +106,19 @@ namespace DipWpf
             ImageHelper.LightnessHistogramEqualization();
         }
 
-
         public void LightnessLinearStretch(object sender, ExecutedRoutedEventArgs e)
         {
             ImageHelper.LightnessLinearStretch();
+        }
+
+        public void HorizontallyMirror(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.MirrorHorizontally();
+        }
+
+        public void VerticallyMirror(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.MirrorVertically();
         }
     }
 }

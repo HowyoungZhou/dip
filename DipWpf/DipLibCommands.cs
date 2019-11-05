@@ -25,5 +25,9 @@ namespace DipWpf
         public static RoutedCommand SaturationHistogramEqualization { get; } = new RoutedCommand();
 
         public static RoutedCommand LightnessLinearStretch { get; } = new RoutedCommand();
+
+        public static RoutedCommand MirrorHorizontally { get; } = new RoutedCommand();
+
+        public static RoutedCommand MirrorVertically { get; } = new RoutedCommand();
     }
 }

@@ -4,7 +4,7 @@ using System.Windows.Media.Imaging;
 
 namespace DipLib
 {
-    public class RGBImage : Image<RGBPixel>
+    public class RGBImage : Image<RGBPixel>, ITransformableImage
     {
         public RGBImage(RGBPixel[,] pixels) : base(pixels) { }
 
@@ -148,6 +148,53 @@ namespace DipLib
                 hsl.L = Convert.ToSingle((cdf[level] - minCDF) / denominator);
                 return hsl.ToRGB();
             });
+        }
+
+        public RGBImage Transform(int newWidth, int newHeight, TransformDelegate transform)
+        {
+            var res = new RGBImage(newWidth, newHeight);
+            for (int y = 0; y < PixelHeight; y++)
+            {
+                for (int x = 0; x < PixelWidth; x++)
+                {
+                    var newPos = transform(new Point(x, y));
+                    if (newPos.X < 0 || newPos.X >= newWidth) continue;
+                    if (newPos.Y < 0 || newPos.Y >= newHeight) continue;
+                    res[newPos] = this[x, y];
+                }
+            }
+            return res;
+        }
+
+        public RGBImage Translate(int dx, int dy)
+        {
+            return Transform(PixelWidth + dx, PixelHeight + dy, (point) => point + new Point(dx, dy));
+        }
+
+        public void MirrorHorizontally()
+        {
+            for (int x = 0; x < PixelWidth / 2; x++)
+            {
+                for (int y = 0; y < PixelHeight; y++)
+                {
+                    var temp = this[x, y];
+                    this[x, y] = this[PixelWidth - 1 - x, y];
+                    this[PixelWidth - 1 - x, y] = temp;
+                }
+            }
+        }
+
+        public void MirrorVertically()
+        {
+            for (int x = 0; x < PixelWidth; x++)
+            {
+                for (int y = 0; y < PixelHeight / 2; y++)
+                {
+                    var temp = this[x, y];
+                    this[x, y] = this[x, PixelHeight - 1 - y];
+                    this[x, PixelHeight - 1 - y] = temp;
+                }
+            }
         }
 
         public byte[] ToBrgaPixelsData()

@@ -13,6 +13,15 @@ namespace DipLib
         public BitmapSource ToBitmapSource(double dpiX, double dpiY);
     }
 
+    public interface ITransformableImage
+    {
+        public RGBImage Translate(int dx, int dy);
+
+        public void MirrorHorizontally();
+
+        public void MirrorVertically();
+    }
+
     public abstract class Image<T> : IEnumerable<T>, IBitmapSource
     {
         public int PixelHeight { get => Pixels.GetLength(1); }
@@ -45,7 +54,9 @@ namespace DipLib
 
         public T[,] Pixels { get; set; }
 
-        public delegate T Process(T pixel);
+        public delegate T PipelineDelegate(T pixel);
+
+        public delegate Point TransformDelegate(Point point);
 
         public Image(int pixelWidth, int pixelHeight)
         {
@@ -73,7 +84,7 @@ namespace DipLib
             return GetEnumerator();
         }
 
-        public void Pipeline(Process process)
+        public void Pipeline(PipelineDelegate process)
         {
             for (int y = 0; y < PixelHeight; y++)
             {
