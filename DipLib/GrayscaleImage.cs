@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -82,7 +83,7 @@ namespace DipLib
         public void HistogramEqualization()
         {
             var cdf = GetHistogramCDF();
-            var minCDF = cdf.GetMin();
+            var minCDF = cdf.Min();
             double denominator = PixelWidth * PixelHeight - minCDF;
             Pipeline((pixel) => Convert.ToByte(Math.Round((cdf[pixel] - minCDF) / denominator * 255)));
         }

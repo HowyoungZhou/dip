@@ -1,14 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DipWpf
 {
@@ -39,6 +32,14 @@ namespace DipWpf
                     inputList.Items.Add(new ListViewItem()
                     {
                         Content = new IntInputListItem(item),
+                        HorizontalContentAlignment = HorizontalAlignment.Stretch
+                    });
+                }
+                else if (item is DoubleInputItem)
+                {
+                    inputList.Items.Add(new ListViewItem()
+                    {
+                        Content = new DoubleInputListItem(item),
                         HorizontalContentAlignment = HorizontalAlignment.Stretch
                     });
                 }

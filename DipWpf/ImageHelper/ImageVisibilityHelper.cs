@@ -27,7 +27,7 @@ namespace DipWpf
         public void ConvertToGrayscale()
         {
             GetGrayscaleImage();
-            NotifyPropertyChanged("Image");
+            NotifyPropertyChanged(nameof(Image));
         }
 
         public void EnhanceVisibility()

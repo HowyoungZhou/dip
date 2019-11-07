@@ -18,7 +18,13 @@ namespace DipWpf
 
         public void Translate(int dx, int dy)
         {
-            DipLibImage = (DipLibImage as ITransformableImage).Translate(dx, dy);
+            DipLibImage = (IBitmapSource)(DipLibImage as ITransformableImage).Translate(dx, dy);
+            RefreshImage();
+        }
+
+        public void RotateD(int originX, int originY, double angle)
+        {
+            DipLibImage = (IBitmapSource)(DipLibImage as ITransformableImage).RotateD(new Point(originX, originY), angle);
             RefreshImage();
         }
     }

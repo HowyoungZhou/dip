@@ -39,7 +39,7 @@ namespace DipWpf
                                     "所有文件 (*.*)|*.*";
             if (openFileDialog.ShowDialog() != true) return;
             ImageHelper = new ImageHelper(openFileDialog.FileName);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ImageHelper"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ImageHelper)));
         }
 
         private void SaveImage(object sender, ExecutedRoutedEventArgs e)
@@ -145,6 +145,44 @@ namespace DipWpf
                 int dx = (dialog.InputItems[0] as IntInputItem).Value;
                 int dy = (dialog.InputItems[1] as IntInputItem).Value;
                 ImageHelper.Translate(dx, dy);
+            }
+        }
+
+        public void Rotate(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dialog = new InputDialog(new List<dynamic> {
+                new IntInputItem() {
+                    Label = "中心点横坐标",
+                    Maximum = ImageHelper.Image.PixelWidth - 1,
+                    Value = (ImageHelper.Image.PixelWidth - 1) / 2,
+                    SmallChange = 10,
+                    LargeChange = 100,
+                    TickFrequency = 50,
+                },
+                new IntInputItem() {
+                    Label = "中心点纵坐标",
+                    Maximum = ImageHelper.Image.PixelHeight-1,
+                    Value = (ImageHelper.Image.PixelHeight - 1) / 2,
+                    SmallChange = 10,
+                    LargeChange = 100,
+                    TickFrequency = 50,
+                },
+                new DoubleInputItem() {
+                    Label = "旋转角度",
+                    Minimum = -180,
+                    Maximum = 180,
+                    SmallChange = 1,
+                    LargeChange = 10,
+                    TickFrequency = 30,
+                    FractionDigits = 2
+                }
+            });
+            if (dialog.ShowDialog().Value)
+            {
+                int originX = (dialog.InputItems[0] as IntInputItem).Value;
+                int originY = (dialog.InputItems[1] as IntInputItem).Value;
+                double angle = (dialog.InputItems[2] as DoubleInputItem).Value;
+                ImageHelper.RotateD(originX, originY, angle);
             }
         }
     }

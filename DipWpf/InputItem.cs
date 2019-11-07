@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 
 namespace DipWpf
@@ -16,7 +17,7 @@ namespace DipWpf
             set
             {
                 _value = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Value"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Value)));
             }
         }
     }
@@ -48,6 +49,18 @@ namespace DipWpf
 
     public class DoubleInputItem : NumberInputItem<double>
     {
+        public int? FractionDigits { get; set; } = null;
+
+        public new double Value
+        {
+            get => base.Value;
+            set
+            {
+                if (FractionDigits.HasValue) value = Math.Round(value, FractionDigits.Value);
+                base.Value = value;
+            }
+        }
+
         public DoubleInputItem()
         {
             Minimum = 0;

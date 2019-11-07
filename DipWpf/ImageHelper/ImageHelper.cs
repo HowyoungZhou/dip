@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Windows.Media.Imaging;
 using DipLib;
@@ -41,9 +42,9 @@ namespace DipWpf
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        private FileType? GetFileTypeByExtension(string extension)
+        private static FileType? GetFileTypeByExtension(string extension)
         {
-            switch (extension.ToLower())
+            switch (extension.ToLower(new CultureInfo("en-US")))
             {
                 case ".png":
                     return FileType.Png;
@@ -69,7 +70,7 @@ namespace DipWpf
             }
         }
 
-        private BitmapEncoder GetEncoder(string fileName)
+        private static BitmapEncoder GetEncoder(string fileName)
         {
             switch (GetFileTypeByExtension(Path.GetExtension(fileName)))
             {
@@ -123,7 +124,7 @@ namespace DipWpf
         private void RefreshImage()
         {
             Image = DipLibImage.ToBitmapSource(Image.DpiX, Image.DpiY);
-            NotifyPropertyChanged("Image");
+            NotifyPropertyChanged(nameof(Image));
         }
     }
 }

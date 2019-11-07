@@ -15,11 +15,13 @@ namespace DipLib
 
     public interface ITransformableImage
     {
-        public RGBImage Translate(int dx, int dy);
+        public ITransformableImage Translate(int dx, int dy);
 
         public void MirrorHorizontally();
 
         public void MirrorVertically();
+
+        public ITransformableImage RotateD(Point point, double angle);
     }
 
     public abstract class Image<T> : IEnumerable<T>, IBitmapSource
@@ -96,32 +98,5 @@ namespace DipLib
         }
 
         public abstract BitmapSource ToBitmapSource(double dpiX, double dpiY);
-    }
-
-    public struct Point
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
-
-        public Point(int x = 0, int y = 0)
-        {
-            this.X = x;
-            this.Y = y;
-        }
-
-        public static Point operator +(Point p1, Point p2)
-        {
-            return new Point(p1.X + p2.X, p1.Y + p2.Y);
-        }
-
-        public static Point operator -(Point p1, Point p2)
-        {
-            return new Point(p1.X - p2.X, p1.Y - p2.Y);
-        }
-
-        public int GetSquaredDistance(Point point)
-        {
-            return (X - point.X) * (X - point.X) + (Y - point.Y) * (Y - point.Y);
-        }
     }
 }

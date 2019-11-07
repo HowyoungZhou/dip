@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -101,7 +102,7 @@ namespace DipLib
         public void SaturationHistogramEqualization(int levels)
         {
             var cdf = GetHistogramCDFOfSaturation(levels);
-            var minCDF = cdf.GetMin();
+            var minCDF = cdf.Min();
             double denominator = PixelWidth * PixelHeight - minCDF;
             Pipeline((pixel) =>
             {
@@ -139,7 +140,7 @@ namespace DipLib
         public void LightnessHistogramEqualization(int levels)
         {
             var cdf = GetHistogramCDFOfLightness(levels);
-            var minCDF = cdf.GetMin();
+            var minCDF = cdf.Min();
             double denominator = PixelWidth * PixelHeight - minCDF;
             Pipeline((pixel) =>
             {
@@ -166,7 +167,7 @@ namespace DipLib
             return res;
         }
 
-        public RGBImage Translate(int dx, int dy)
+        public ITransformableImage Translate(int dx, int dy)
         {
             return Transform(PixelWidth + dx, PixelHeight + dy, (point) => point + new Point(dx, dy));
         }
@@ -195,6 +196,18 @@ namespace DipLib
                     this[x, PixelHeight - 1 - y] = temp;
                 }
             }
+        }
+
+        public ITransformableImage RotateD(Point origin, double angle)
+        {
+            Point p1 = Point.Zeros.RotateD(origin, angle);
+            Point p2 = new Point(PixelWidth - 1, 0).RotateD(origin, angle);
+            Point p3 = new Point(0, PixelHeight - 1).RotateD(origin, angle);
+            Point p4 = new Point(PixelWidth - 1, PixelHeight - 1).RotateD(origin, angle);
+            var xs = new int[] { p1.X, p2.X, p3.X, p4.X };
+            var ys = new int[] { p1.Y, p2.Y, p3.Y, p4.Y };
+            var newOrigin = new Point(xs.Min(), ys.Min());
+            return Transform(xs.Max() - xs.Min(), ys.Max() - ys.Min(), (point) => point.RotateD(origin, angle) - newOrigin);
         }
 
         public byte[] ToBrgaPixelsData()

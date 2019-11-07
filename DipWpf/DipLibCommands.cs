@@ -31,5 +31,7 @@ namespace DipWpf
         public static RoutedCommand MirrorVertically { get; } = new RoutedCommand();
 
         public static RoutedCommand Translate { get; } = new RoutedCommand();
+
+        public static RoutedCommand Rotate { get; } = new RoutedCommand();
     }
 }
