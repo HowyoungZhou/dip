@@ -15,5 +15,11 @@ namespace DipWpf
             (DipLibImage as ITransformableImage).MirrorVertically();
             RefreshImage();
         }
+
+        public void Translate(int dx, int dy)
+        {
+            DipLibImage = (DipLibImage as ITransformableImage).Translate(dx, dy);
+            RefreshImage();
+        }
     }
 }

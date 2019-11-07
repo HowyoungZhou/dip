@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
@@ -119,6 +120,32 @@ namespace DipWpf
         public void VerticallyMirror(object sender, ExecutedRoutedEventArgs e)
         {
             ImageHelper.MirrorVertically();
+        }
+
+        public void Translate(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dialog = new InputDialog(new List<dynamic> {
+                new IntInputItem() {
+                    Label = "水平分量",
+                    Maximum = ImageHelper.Image.PixelWidth,
+                    SmallChange = 10,
+                    LargeChange = 100,
+                    TickFrequency = 50,
+                },
+                new IntInputItem() {
+                    Label = "垂直分量",
+                    Maximum = ImageHelper.Image.PixelHeight,
+                    SmallChange = 10,
+                    LargeChange = 100,
+                    TickFrequency = 50,
+                },
+            });
+            if (dialog.ShowDialog().Value)
+            {
+                int dx = (dialog.InputItems[0] as IntInputItem).Value;
+                int dy = (dialog.InputItems[1] as IntInputItem).Value;
+                ImageHelper.Translate(dx, dy);
+            }
         }
     }
 }

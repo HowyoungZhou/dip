@@ -23,6 +23,7 @@
         <CommandBinding Command="{x:Static local:DipLibCommands.LightnessLinearStretch}" Executed="LightnessLinearStretch" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.MirrorHorizontally}" Executed="HorizontallyMirror" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.MirrorVertically}" Executed="VerticallyMirror" CanExecute="IsImageOpened"/>
+        <CommandBinding Command="{x:Static local:DipLibCommands.Translate}" Executed="Translate" CanExecute="IsImageOpened"/>
     </Window.CommandBindings>
 
     <Grid>
@@ -62,6 +63,7 @@
                     <MenuItem Header="水平(_H)" Command="{x:Static local:DipLibCommands.MirrorHorizontally}"/>
                     <MenuItem Header="垂直(_V)" Command="{x:Static local:DipLibCommands.MirrorVertically}"/>
                 </MenuItem>
+                <MenuItem Header="平移(_T)" Command="{x:Static local:DipLibCommands.Translate}"/>
             </MenuItem>
         </Menu>
         <Image Source="{Binding Path=ImageHelper.Image}" Grid.Row="1"/>
