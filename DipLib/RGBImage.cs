@@ -7,9 +7,13 @@ namespace DipLib
 {
     public class RGBImage : Image<RGBPixel>, ITransformableImage
     {
-        public RGBImage(RGBPixel[,] pixels) : base(pixels) { }
+        public RGBImage(RGBPixel[,] pixels) : base(pixels)
+        {
+        }
 
-        public RGBImage(int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight) { }
+        public RGBImage(int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight)
+        {
+        }
 
         public RGBImage(byte[] bgraPixels, int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight)
         {
@@ -23,7 +27,8 @@ namespace DipLib
                     // offset + 1: G
                     // offset + 2: R
                     // offset + 3: A
-                    Pixels[x, y] = new RGBPixel(bgraPixels[offset + 2], bgraPixels[offset + 1], bgraPixels[offset + 0], bgraPixels[offset + 3]);
+                    Pixels[x, y] = new RGBPixel(bgraPixels[offset + 2], bgraPixels[offset + 1], bgraPixels[offset + 0],
+                        bgraPixels[offset + 3]);
                 }
             }
         }
@@ -35,8 +40,8 @@ namespace DipLib
             {
                 float l = pixel.ToHSL().L;
                 if (l > max) max = l;
-
             }
+
             return max;
         }
 
@@ -47,8 +52,8 @@ namespace DipLib
             {
                 float l = pixel.ToHSL().L;
                 if (l < min) min = l;
-
             }
+
             return min;
         }
 
@@ -80,9 +85,10 @@ namespace DipLib
             var res = new long[levels];
             foreach (var pixel in this)
             {
-                int level = (int)Math.Round(pixel.ToHSL().S * (levels - 1));
+                int level = (int) Math.Round(pixel.ToHSL().S * (levels - 1));
                 res[level]++;
             }
+
             return res;
         }
 
@@ -96,6 +102,7 @@ namespace DipLib
                 res[i] = histogram[i] + sum;
                 sum += histogram[i];
             }
+
             return res;
         }
 
@@ -107,7 +114,7 @@ namespace DipLib
             Pipeline((pixel) =>
             {
                 var hsl = pixel.ToHSL();
-                int level = (int)Math.Round(hsl.S * (levels - 1));
+                int level = (int) Math.Round(hsl.S * (levels - 1));
                 hsl.S = Convert.ToSingle((cdf[level] - minCDF) / denominator);
                 return hsl.ToRGB();
             });
@@ -118,9 +125,10 @@ namespace DipLib
             var res = new long[levels];
             foreach (var pixel in this)
             {
-                int level = (int)Math.Round(pixel.ToHSL().L * (levels - 1));
+                int level = (int) Math.Round(pixel.ToHSL().L * (levels - 1));
                 res[level]++;
             }
+
             return res;
         }
 
@@ -134,6 +142,7 @@ namespace DipLib
                 res[i] = histogram[i] + sum;
                 sum += histogram[i];
             }
+
             return res;
         }
 
@@ -145,7 +154,7 @@ namespace DipLib
             Pipeline((pixel) =>
             {
                 var hsl = pixel.ToHSL();
-                int level = (int)Math.Round(hsl.L * (levels - 1));
+                int level = (int) Math.Round(hsl.L * (levels - 1));
                 hsl.L = Convert.ToSingle((cdf[level] - minCDF) / denominator);
                 return hsl.ToRGB();
             });
@@ -164,6 +173,7 @@ namespace DipLib
                     res[newPos] = this[x, y];
                 }
             }
+
             return res;
         }
 
@@ -204,10 +214,11 @@ namespace DipLib
             Point p2 = new Point(PixelWidth - 1, 0).RotateD(origin, angle);
             Point p3 = new Point(0, PixelHeight - 1).RotateD(origin, angle);
             Point p4 = new Point(PixelWidth - 1, PixelHeight - 1).RotateD(origin, angle);
-            var xs = new int[] { p1.X, p2.X, p3.X, p4.X };
-            var ys = new int[] { p1.Y, p2.Y, p3.Y, p4.Y };
+            var xs = new int[] {p1.X, p2.X, p3.X, p4.X};
+            var ys = new int[] {p1.Y, p2.Y, p3.Y, p4.Y};
             var newOrigin = new Point(xs.Min(), ys.Min());
-            return Transform(xs.Max() - xs.Min(), ys.Max() - ys.Min(), (point) => point.RotateD(origin, angle) - newOrigin);
+            return Transform(xs.Max() - xs.Min() + 1, ys.Max() - ys.Min() + 1,
+                (point) => point.RotateD(origin, angle) - newOrigin);
         }
 
         public byte[] ToBrgaPixelsData()
@@ -225,12 +236,14 @@ namespace DipLib
                     data[offset + 3] = pixel.A;
                 }
             }
+
             return data;
         }
 
         public override BitmapSource ToBitmapSource(double dpiX, double dpiY)
         {
-            return BitmapSource.Create(PixelWidth, PixelHeight, dpiX, dpiY, PixelFormats.Bgra32, null, ToBrgaPixelsData(), PixelWidth * 4);
+            return BitmapSource.Create(PixelWidth, PixelHeight, dpiX, dpiY, PixelFormats.Bgra32, null,
+                ToBrgaPixelsData(), PixelWidth * 4);
         }
     }
 }

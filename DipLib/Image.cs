@@ -6,52 +6,40 @@ namespace DipLib
 {
     public interface IBitmapSource
     {
-        public int PixelHeight { get; }
+        int PixelHeight { get; }
 
-        public int PixelWidth { get; }
+        int PixelWidth { get; }
 
-        public BitmapSource ToBitmapSource(double dpiX, double dpiY);
+        BitmapSource ToBitmapSource(double dpiX, double dpiY);
     }
 
     public interface ITransformableImage
     {
-        public ITransformableImage Translate(int dx, int dy);
+        ITransformableImage Translate(int dx, int dy);
 
-        public void MirrorHorizontally();
+        void MirrorHorizontally();
 
-        public void MirrorVertically();
+        void MirrorVertically();
 
-        public ITransformableImage RotateD(Point point, double angle);
+        ITransformableImage RotateD(Point point, double angle);
     }
 
     public abstract class Image<T> : IEnumerable<T>, IBitmapSource
     {
-        public int PixelHeight { get => Pixels.GetLength(1); }
+        public int PixelHeight => Pixels.GetLength(1);
 
-        public int PixelWidth { get => Pixels.GetLength(0); }
+        public int PixelWidth => Pixels.GetLength(0);
 
         public T this[int x, int y]
         {
-            get
-            {
-                return Pixels[x, y];
-            }
-            set
-            {
-                Pixels[x, y] = value;
-            }
+            get => Pixels[x, y];
+            set => Pixels[x, y] = value;
         }
 
         public T this[Point point]
         {
-            get
-            {
-                return Pixels[point.X, point.Y];
-            }
-            set
-            {
-                Pixels[point.X, point.Y] = value;
-            }
+            get => Pixels[point.X, point.Y];
+            set => Pixels[point.X, point.Y] = value;
         }
 
         public T[,] Pixels { get; set; }
