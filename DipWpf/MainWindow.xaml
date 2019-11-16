@@ -25,6 +25,7 @@
         <CommandBinding Command="{x:Static local:DipLibCommands.MirrorVertically}" Executed="VerticallyMirror" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.Translate}" Executed="Translate" CanExecute="IsImageOpened"/>
         <CommandBinding Command="{x:Static local:DipLibCommands.Rotate}" Executed="Rotate" CanExecute="IsImageOpened"/>
+        <CommandBinding Command="{x:Static local:DipLibCommands.Shear}" Executed="Shear" CanExecute="IsImageOpened"/>
     </Window.CommandBindings>
 
     <Grid>
@@ -66,6 +67,7 @@
                 </MenuItem>
                 <MenuItem Header="平移(_T)" Command="{x:Static local:DipLibCommands.Translate}"/>
                 <MenuItem Header="旋转(_R)" Command="{x:Static local:DipLibCommands.Rotate}"/>
+                <MenuItem Header="切变(_S)" Command="{x:Static local:DipLibCommands.Shear}"/>
             </MenuItem>
         </Menu>
         <Image Source="{Binding Path=ImageHelper.Image}" Grid.Row="1"/>

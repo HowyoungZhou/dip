@@ -22,6 +22,8 @@ namespace DipLib
         void MirrorVertically();
 
         ITransformableImage RotateD(Point point, double angle);
+
+        ITransformableImage Shear(double dx, double dy);
     }
 
     public abstract class Image<T> : IEnumerable<T>, IBitmapSource
@@ -44,7 +46,9 @@ namespace DipLib
 
         public T[,] Pixels { get; set; }
 
-        public delegate T PipelineDelegate(T pixel);
+        public delegate T PixelPipelineDelegate(T pixel);
+
+        public delegate T PixelPositionPipelineDelegate(T pixel, Point position);
 
         public delegate Point TransformDelegate(Point point);
 
@@ -74,7 +78,7 @@ namespace DipLib
             return GetEnumerator();
         }
 
-        public void Pipeline(PipelineDelegate process)
+        public Image<T> Pipeline(PixelPipelineDelegate process)
         {
             for (int y = 0; y < PixelHeight; y++)
             {
@@ -83,6 +87,21 @@ namespace DipLib
                     Pixels[x, y] = process(Pixels[x, y]);
                 }
             }
+            
+            return this;
+        }
+
+        public Image<T> Pipeline(PixelPositionPipelineDelegate process)
+        {
+            for (int y = 0; y < PixelHeight; y++)
+            {
+                for (int x = 0; x < PixelWidth; x++)
+                {
+                    Pixels[x, y] = process(Pixels[x, y], new Point(x, y));
+                }
+            }
+
+            return this;
         }
 
         public abstract BitmapSource ToBitmapSource(double dpiX, double dpiY);

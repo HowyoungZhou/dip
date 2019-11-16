@@ -33,5 +33,7 @@ namespace DipWpf
         public static RoutedCommand Translate { get; } = new RoutedCommand();
 
         public static RoutedCommand Rotate { get; } = new RoutedCommand();
+        
+        public static RoutedCommand Shear { get; } = new RoutedCommand();
     }
 }

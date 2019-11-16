@@ -267,7 +267,7 @@ namespace DipLib
                 res.RowInterpolation(y, inters.Min(), inters.Max());
             }
 
-            res.Pipeline((pixel) => pixel ?? RGBColors.Transparent);
+            res.FillNullPixels();
             return res;
         }
 
@@ -289,6 +289,8 @@ namespace DipLib
             }
         }
 
+        private void FillNullPixels() => Pipeline((pixel) => pixel ?? RGBColors.Transparent);
+
         public byte[] ToBrgaPixelsData()
         {
             byte[] data = new byte[PixelHeight * PixelWidth * 4];
@@ -307,6 +309,34 @@ namespace DipLib
             }
 
             return data;
+        }
+
+        public ITransformableImage Shear(double dx, double dy)
+        {
+            var res = Transform(
+                (int) Math.Ceiling(PixelWidth + dx * PixelHeight),
+                (int) Math.Ceiling(PixelHeight + dy * PixelWidth),
+                (point) => new Point(
+                    (int) Math.Round(point.X + dx * point.Y),
+                    (int) Math.Round(point.Y + dy * point.X)
+                )
+            );
+            
+            for (int x = 0; x < res.PixelWidth; x++)
+            {
+                for (int y = 0; y < res.PixelHeight; y++)
+                {
+                    if (res[x, y] != null) continue;
+                    int x0 = (int) Math.Round((x - y * dx) / (1 - dx * dy));
+                    if (x0 < 0 || x0 >= PixelWidth) continue;
+                    int y0 = (int) Math.Round((y - x * dy) / (1 - dx * dy));
+                    if (y0 < 0 || y0 >= PixelHeight) continue;
+                    res[x, y] = this[x0, y0];
+                }
+            }
+
+            res.FillNullPixels();
+            return res;
         }
 
         public override BitmapSource ToBitmapSource(double dpiX, double dpiY)

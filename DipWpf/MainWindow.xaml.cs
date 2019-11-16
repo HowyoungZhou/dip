@@ -29,14 +29,15 @@ namespace DipWpf
         private void OpenImage(object sender, ExecutedRoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "所有支持的格式|*.png;*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi;*.bmp;*.dib;*.gif;*.tiff;*.tif;*.wmp|" +
-                                    "PNG (*.png)|*.png|" +
-                                    "JPEG (*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi)|*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi|" +
-                                    "BMP (*.bmp;*.dib)|*.bmp;*.dib|" +
-                                    "GIF (*.gif)|*.gif|" +
-                                    "TIFF (*.tiff;*.tif)|*.tiff;*.tif|" +
-                                    "WMP (*.wmp)|*.wmp|" +
-                                    "所有文件 (*.*)|*.*";
+            openFileDialog.Filter =
+                "所有支持的格式|*.png;*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi;*.bmp;*.dib;*.gif;*.tiff;*.tif;*.wmp|" +
+                "PNG (*.png)|*.png|" +
+                "JPEG (*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi)|*.jpg;*.jpeg;*.jpe;*.jif;*.jfif;*.jfi|" +
+                "BMP (*.bmp;*.dib)|*.bmp;*.dib|" +
+                "GIF (*.gif)|*.gif|" +
+                "TIFF (*.tiff;*.tif)|*.tiff;*.tif|" +
+                "WMP (*.wmp)|*.wmp|" +
+                "所有文件 (*.*)|*.*";
             if (openFileDialog.ShowDialog() != true) return;
             ImageHelper = new ImageHelper(openFileDialog.FileName);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ImageHelper)));
@@ -124,15 +125,18 @@ namespace DipWpf
 
         public void Translate(object sender, ExecutedRoutedEventArgs e)
         {
-            var dialog = new InputDialog(new List<dynamic> {
-                new IntInputItem() {
+            var dialog = new InputDialog(new List<dynamic>
+            {
+                new IntInputItem()
+                {
                     Label = "水平分量",
                     Maximum = ImageHelper.Image.PixelWidth,
                     SmallChange = 10,
                     LargeChange = 100,
                     TickFrequency = 50,
                 },
-                new IntInputItem() {
+                new IntInputItem()
+                {
                     Label = "垂直分量",
                     Maximum = ImageHelper.Image.PixelHeight,
                     SmallChange = 10,
@@ -150,8 +154,10 @@ namespace DipWpf
 
         public void Rotate(object sender, ExecutedRoutedEventArgs e)
         {
-            var dialog = new InputDialog(new List<dynamic> {
-                new IntInputItem() {
+            var dialog = new InputDialog(new List<dynamic>
+            {
+                new IntInputItem()
+                {
                     Label = "中心点横坐标",
                     Maximum = ImageHelper.Image.PixelWidth - 1,
                     Value = (ImageHelper.Image.PixelWidth - 1) / 2,
@@ -159,15 +165,17 @@ namespace DipWpf
                     LargeChange = 100,
                     TickFrequency = 50,
                 },
-                new IntInputItem() {
+                new IntInputItem()
+                {
                     Label = "中心点纵坐标",
-                    Maximum = ImageHelper.Image.PixelHeight-1,
+                    Maximum = ImageHelper.Image.PixelHeight - 1,
                     Value = (ImageHelper.Image.PixelHeight - 1) / 2,
                     SmallChange = 10,
                     LargeChange = 100,
                     TickFrequency = 50,
                 },
-                new DoubleInputItem() {
+                new DoubleInputItem()
+                {
                     Label = "旋转角度",
                     Minimum = -180,
                     Maximum = 180,
@@ -177,13 +185,43 @@ namespace DipWpf
                     FractionDigits = 2
                 }
             });
-            if (dialog.ShowDialog().Value)
+            if (!dialog.ShowDialog().Value) return;
+            int originX = (dialog.InputItems[0] as IntInputItem).Value;
+            int originY = (dialog.InputItems[1] as IntInputItem).Value;
+            double angle = (dialog.InputItems[2] as DoubleInputItem).Value;
+            ImageHelper.RotateD(originX, originY, angle);
+        }
+
+        public void Shear(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dialog = new InputDialog(new List<dynamic>()
             {
-                int originX = (dialog.InputItems[0] as IntInputItem).Value;
-                int originY = (dialog.InputItems[1] as IntInputItem).Value;
-                double angle = (dialog.InputItems[2] as DoubleInputItem).Value;
-                ImageHelper.RotateD(originX, originY, angle);
-            }
+                new DoubleInputItem()
+                {
+                    Label = "水平拉伸",
+                    Minimum = 0,
+                    Maximum = 1,
+                    SmallChange = 0.01,
+                    LargeChange = 0.1,
+                    TickFrequency = 0.1,
+                    FractionDigits = 2
+                },
+                new DoubleInputItem()
+                {
+                    Label = "垂直拉伸",
+                    Minimum = 0,
+                    Maximum = 1,
+                    SmallChange = 0.01,
+                    LargeChange = 0.1,
+                    TickFrequency = 0.1,
+                    FractionDigits = 2
+                },
+            });
+
+            if (!dialog.ShowDialog().Value) return;
+            double dx = ((DoubleInputItem) dialog.InputItems[0]).Value;
+            double dy = ((DoubleInputItem) dialog.InputItems[1]).Value;
+            ImageHelper.Shear(dx, dy);
         }
     }
 }
