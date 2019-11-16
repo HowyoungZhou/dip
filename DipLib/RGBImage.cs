@@ -291,6 +291,74 @@ namespace DipLib
 
         private void FillNullPixels() => Pipeline((pixel) => pixel ?? RGBColors.Transparent);
 
+        public ITransformableImage Shear(double dx, double dy)
+        {
+            var res = Transform(
+                (int) Math.Ceiling(PixelWidth + dx * PixelHeight),
+                (int) Math.Ceiling(PixelHeight + dy * PixelWidth),
+                (point) => new Point(
+                    (int) Math.Round(point.X + dx * point.Y),
+                    (int) Math.Round(point.Y + dy * point.X)
+                )
+            );
+
+            for (int x = 0; x < res.PixelWidth; x++)
+            {
+                for (int y = 0; y < res.PixelHeight; y++)
+                {
+                    if (res[x, y] != null) continue;
+                    int x0 = (int) Math.Round((x - y * dx) / (1 - dx * dy));
+                    if (x0 < 0 || x0 >= PixelWidth) continue;
+                    int y0 = (int) Math.Round((y - x * dy) / (1 - dx * dy));
+                    if (y0 < 0 || y0 >= PixelHeight) continue;
+                    res[x, y] = this[x0, y0];
+                }
+            }
+
+            res.FillNullPixels();
+            return res;
+        }
+
+        public ITransformableImage Scale(double kx, double ky, Interpolation interpolation)
+        {
+            var res = Transform(
+                (int) Math.Ceiling(kx * PixelWidth),
+                (int) Math.Ceiling(ky * PixelHeight),
+                (point) => new Point(
+                    (int) Math.Round(kx * point.X),
+                    (int) Math.Round(ky * point.Y)
+                )
+            );
+
+            switch (interpolation)
+            {
+                case Interpolation.NearestNeighborInterpolation:
+                    res.NearestNeighborInterpolation(this, kx, ky);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(interpolation), interpolation, null);
+            }
+
+            res.FillNullPixels();
+            return res;
+        }
+
+        private void NearestNeighborInterpolation(RGBImage origin, double kx, double ky)
+        {
+            for (int x = 0; x < PixelWidth; x++)
+            {
+                for (int y = 0; y < PixelHeight; y++)
+                {
+                    if (this[x, y] != null) continue;
+                    int x0 = (int) Math.Round(x / kx);
+                    if (x0 < 0 || x0 >= origin.PixelWidth) continue;
+                    int y0 = (int) Math.Round(y / ky);
+                    if (y0 < 0 || y0 >= origin.PixelHeight) continue;
+                    this[x, y] = origin[x0, y0];
+                }
+            }
+        }
+
         public byte[] ToBrgaPixelsData()
         {
             byte[] data = new byte[PixelHeight * PixelWidth * 4];
@@ -309,34 +377,6 @@ namespace DipLib
             }
 
             return data;
-        }
-
-        public ITransformableImage Shear(double dx, double dy)
-        {
-            var res = Transform(
-                (int) Math.Ceiling(PixelWidth + dx * PixelHeight),
-                (int) Math.Ceiling(PixelHeight + dy * PixelWidth),
-                (point) => new Point(
-                    (int) Math.Round(point.X + dx * point.Y),
-                    (int) Math.Round(point.Y + dy * point.X)
-                )
-            );
-            
-            for (int x = 0; x < res.PixelWidth; x++)
-            {
-                for (int y = 0; y < res.PixelHeight; y++)
-                {
-                    if (res[x, y] != null) continue;
-                    int x0 = (int) Math.Round((x - y * dx) / (1 - dx * dy));
-                    if (x0 < 0 || x0 >= PixelWidth) continue;
-                    int y0 = (int) Math.Round((y - x * dy) / (1 - dx * dy));
-                    if (y0 < 0 || y0 >= PixelHeight) continue;
-                    res[x, y] = this[x0, y0];
-                }
-            }
-
-            res.FillNullPixels();
-            return res;
         }
 
         public override BitmapSource ToBitmapSource(double dpiX, double dpiY)

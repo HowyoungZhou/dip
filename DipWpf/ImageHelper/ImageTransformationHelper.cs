@@ -34,5 +34,13 @@ namespace DipWpf
             DipLibImage = (IBitmapSource) (DipLibImage as ITransformableImage).Shear(dx, dy);
             RefreshImage();
         }
+
+        public void ScaleWithNNI(double kx, double ky)
+        {
+            DipLibImage =
+                (IBitmapSource) (DipLibImage as ITransformableImage).Scale(kx, ky,
+                    Interpolation.NearestNeighborInterpolation);
+            RefreshImage();
+        }
     }
 }

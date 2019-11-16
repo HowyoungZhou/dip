@@ -1,75 +1,94 @@
-﻿<Window x:Class="DipWpf.MainWindow" 
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:local="clr-namespace:DipWpf" mc:Ignorable="d" Title="Dip" Height="450" Width="800">
+﻿<Window x:Class="DipWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DipWpf" mc:Ignorable="d" Title="Dip" Height="450" Width="800">
 
     <Window.CommandBindings>
-        <CommandBinding Command="ApplicationCommands.Open" Executed="OpenImage"/>
-        <CommandBinding Command="ApplicationCommands.Save" Executed="SaveImage" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="ApplicationCommands.SaveAs" Executed="SaveImageAs" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="ApplicationCommands.Close" Executed="Exit"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.ConvertToGrayscale}" Executed="ConvertToGrayscale" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.Binarize}" Executed="Binarize" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.Dilation}" Executed="Dilation" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.Erosion}" Executed="Erosion" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.MorphologyOpen}" Executed="MorphologyOpen" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.MorphologyClose}" Executed="MorphologyClose" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.EnhanceVisibility}" Executed="EnhanceVisibility" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.GrayscaleHistogramEqualization}" Executed="GrayscaleHistogramEqualization" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.SaturationHistogramEqualization}" Executed="SaturationHistogramEqualization" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.LightnessHistogramEqualization}" Executed="LightnessHistogramEqualization" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.LightnessLinearStretch}" Executed="LightnessLinearStretch" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.MirrorHorizontally}" Executed="HorizontallyMirror" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.MirrorVertically}" Executed="VerticallyMirror" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.Translate}" Executed="Translate" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.Rotate}" Executed="Rotate" CanExecute="IsImageOpened"/>
-        <CommandBinding Command="{x:Static local:DipLibCommands.Shear}" Executed="Shear" CanExecute="IsImageOpened"/>
+        <CommandBinding Command="ApplicationCommands.Open" Executed="OpenImage" />
+        <CommandBinding Command="ApplicationCommands.Save" Executed="SaveImage" CanExecute="IsImageOpened" />
+        <CommandBinding Command="ApplicationCommands.SaveAs" Executed="SaveImageAs" CanExecute="IsImageOpened" />
+        <CommandBinding Command="ApplicationCommands.Close" Executed="Exit" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.ConvertToGrayscale}" Executed="ConvertToGrayscale"
+                        CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.Binarize}" Executed="Binarize"
+                        CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.Dilation}" Executed="Dilation"
+                        CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.Erosion}" Executed="Erosion" CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.MorphologyOpen}" Executed="MorphologyOpen"
+                        CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.MorphologyClose}" Executed="MorphologyClose"
+                        CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.EnhanceVisibility}" Executed="EnhanceVisibility"
+                        CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.GrayscaleHistogramEqualization}"
+                        Executed="GrayscaleHistogramEqualization" CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.SaturationHistogramEqualization}"
+                        Executed="SaturationHistogramEqualization" CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.LightnessHistogramEqualization}"
+                        Executed="LightnessHistogramEqualization" CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.LightnessLinearStretch}"
+                        Executed="LightnessLinearStretch" CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.MirrorHorizontally}" Executed="HorizontallyMirror"
+                        CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.MirrorVertically}" Executed="VerticallyMirror"
+                        CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.Translate}" Executed="Translate"
+                        CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.Rotate}" Executed="Rotate" CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.Shear}" Executed="Shear" CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.ScaleWithNNI}" Executed="ScaleWithNNI"
+                        CanExecute="IsImageOpened" />
     </Window.CommandBindings>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Menu>
             <MenuItem Header="文件(_F)">
-                <MenuItem Header="打开(_O)" Command="ApplicationCommands.Open"/>
-                <MenuItem Header="保存(_S)" Command="ApplicationCommands.Save"/>
-                <MenuItem Header="另存为(_A)" Command="ApplicationCommands.SaveAs"/>
-                <Separator/>
-                <MenuItem Header="退出(_E)" Command="ApplicationCommands.Close"/>
+                <MenuItem Header="打开(_O)" Command="ApplicationCommands.Open" />
+                <MenuItem Header="保存(_S)" Command="ApplicationCommands.Save" />
+                <MenuItem Header="另存为(_A)" Command="ApplicationCommands.SaveAs" />
+                <Separator />
+                <MenuItem Header="退出(_E)" Command="ApplicationCommands.Close" />
             </MenuItem>
             <MenuItem Header="转换(_C)">
-                <MenuItem Header="转换为灰度(_G)" Command="{x:Static local:DipLibCommands.ConvertToGrayscale}"/>
-                <MenuItem Header="二值化(_B)" Command="{x:Static local:DipLibCommands.Binarize}"/>
+                <MenuItem Header="转换为灰度(_G)" Command="{x:Static local:DipLibCommands.ConvertToGrayscale}" />
+                <MenuItem Header="二值化(_B)" Command="{x:Static local:DipLibCommands.Binarize}" />
             </MenuItem>
             <MenuItem Header="形态学(_M)">
-                <MenuItem Header="膨胀(_D)" Command="{x:Static local:DipLibCommands.Dilation}"/>
-                <MenuItem Header="腐蚀(_E)" Command="{x:Static local:DipLibCommands.Erosion}"/>
-                <MenuItem Header="开操作(_O)" Command="{x:Static local:DipLibCommands.MorphologyOpen}"/>
-                <MenuItem Header="闭操作(_C)" Command="{x:Static local:DipLibCommands.MorphologyClose}"/>
+                <MenuItem Header="膨胀(_D)" Command="{x:Static local:DipLibCommands.Dilation}" />
+                <MenuItem Header="腐蚀(_E)" Command="{x:Static local:DipLibCommands.Erosion}" />
+                <MenuItem Header="开操作(_O)" Command="{x:Static local:DipLibCommands.MorphologyOpen}" />
+                <MenuItem Header="闭操作(_C)" Command="{x:Static local:DipLibCommands.MorphologyClose}" />
             </MenuItem>
             <MenuItem Header="调整(_A)">
-                <MenuItem Header="亮度增强(_L)" Command="{x:Static local:DipLibCommands.EnhanceVisibility}"/>
-                <MenuItem Header="亮度线性拉伸(_S)" Command="{x:Static local:DipLibCommands.LightnessLinearStretch}"/>
+                <MenuItem Header="亮度增强(_L)" Command="{x:Static local:DipLibCommands.EnhanceVisibility}" />
+                <MenuItem Header="亮度线性拉伸(_S)" Command="{x:Static local:DipLibCommands.LightnessLinearStretch}" />
                 <MenuItem Header="直方图均衡化(_H)">
-                    <MenuItem Header="灰度(_G)" Command="{x:Static local:DipLibCommands.GrayscaleHistogramEqualization}"/>
-                    <MenuItem Header="亮度(_L)" Command="{x:Static local:DipLibCommands.LightnessHistogramEqualization}"/>
-                    <MenuItem Header="饱和度(_S)" Command="{x:Static local:DipLibCommands.SaturationHistogramEqualization}"/>
+                    <MenuItem Header="灰度(_G)" Command="{x:Static local:DipLibCommands.GrayscaleHistogramEqualization}" />
+                    <MenuItem Header="亮度(_L)" Command="{x:Static local:DipLibCommands.LightnessHistogramEqualization}" />
+                    <MenuItem Header="饱和度(_S)"
+                              Command="{x:Static local:DipLibCommands.SaturationHistogramEqualization}" />
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="转换(_T)">
                 <MenuItem Header="镜像(_M)">
-                    <MenuItem Header="水平(_H)" Command="{x:Static local:DipLibCommands.MirrorHorizontally}"/>
-                    <MenuItem Header="垂直(_V)" Command="{x:Static local:DipLibCommands.MirrorVertically}"/>
+                    <MenuItem Header="水平(_H)" Command="{x:Static local:DipLibCommands.MirrorHorizontally}" />
+                    <MenuItem Header="垂直(_V)" Command="{x:Static local:DipLibCommands.MirrorVertically}" />
                 </MenuItem>
-                <MenuItem Header="平移(_T)" Command="{x:Static local:DipLibCommands.Translate}"/>
-                <MenuItem Header="旋转(_R)" Command="{x:Static local:DipLibCommands.Rotate}"/>
-                <MenuItem Header="切变(_S)" Command="{x:Static local:DipLibCommands.Shear}"/>
+                <MenuItem Header="平移(_T)" Command="{x:Static local:DipLibCommands.Translate}" />
+                <MenuItem Header="旋转(_R)" Command="{x:Static local:DipLibCommands.Rotate}" />
+                <MenuItem Header="切变(_S)" Command="{x:Static local:DipLibCommands.Shear}" />
+                <MenuItem Header="缩放(_C)">
+                    <MenuItem Header="最近邻差值(_N)" Command="{x:Static local:DipLibCommands.ScaleWithNNI}" />
+                </MenuItem>
             </MenuItem>
         </Menu>
-        <Image Source="{Binding Path=ImageHelper.Image}" Grid.Row="1"/>
+        <Image Source="{Binding Path=ImageHelper.Image}" Grid.Row="1" />
     </Grid>
 </Window>

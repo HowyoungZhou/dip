@@ -198,7 +198,7 @@ namespace DipWpf
             {
                 new DoubleInputItem()
                 {
-                    Label = "水平拉伸",
+                    Label = "水平切变",
                     Minimum = 0,
                     Maximum = 1,
                     SmallChange = 0.01,
@@ -208,7 +208,7 @@ namespace DipWpf
                 },
                 new DoubleInputItem()
                 {
-                    Label = "垂直拉伸",
+                    Label = "垂直切变",
                     Minimum = 0,
                     Maximum = 1,
                     SmallChange = 0.01,
@@ -222,6 +222,48 @@ namespace DipWpf
             double dx = ((DoubleInputItem) dialog.InputItems[0]).Value;
             double dy = ((DoubleInputItem) dialog.InputItems[1]).Value;
             ImageHelper.Shear(dx, dy);
+        }
+
+        public bool GetScaleRatios(out double kx, out double ky)
+        {
+            kx = ky = 0;
+            var dialog = new InputDialog(new List<dynamic>
+            {
+                new DoubleInputItem()
+                {
+                    Label = "水平缩放",
+                    Value = 1,
+                    Minimum = 0,
+                    Maximum = 10,
+                    SmallChange = 0.1,
+                    LargeChange = 1,
+                    TickFrequency = 1,
+                    FractionDigits = 2
+                },
+                new DoubleInputItem()
+                {
+                    Label = "垂直缩放",
+                    Value = 1,
+                    Minimum = 0,
+                    Maximum = 10,
+                    SmallChange = 0.1,
+                    LargeChange = 1,
+                    TickFrequency = 1,
+                    FractionDigits = 2
+                },
+            });
+
+            if (!dialog.ShowDialog().Value) return false;
+            kx = ((DoubleInputItem) dialog.InputItems[0]).Value;
+            ky = ((DoubleInputItem) dialog.InputItems[1]).Value;
+            return true;
+        }
+
+        public void ScaleWithNNI(object sender, ExecutedRoutedEventArgs e)
+        {
+            double kx, ky;
+            if (!GetScaleRatios(out kx, out ky)) return;
+            ImageHelper.ScaleWithNNI(kx, ky);
         }
     }
 }

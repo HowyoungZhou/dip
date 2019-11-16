@@ -24,6 +24,8 @@ namespace DipLib
         ITransformableImage RotateD(Point point, double angle);
 
         ITransformableImage Shear(double dx, double dy);
+
+        ITransformableImage Scale(double kx, double ky, Interpolation interpolation);
     }
 
     public abstract class Image<T> : IEnumerable<T>, IBitmapSource
@@ -87,7 +89,7 @@ namespace DipLib
                     Pixels[x, y] = process(Pixels[x, y]);
                 }
             }
-            
+
             return this;
         }
 
@@ -105,5 +107,10 @@ namespace DipLib
         }
 
         public abstract BitmapSource ToBitmapSource(double dpiX, double dpiY);
+    }
+
+    public enum Interpolation
+    {
+        NearestNeighborInterpolation,
     }
 }
