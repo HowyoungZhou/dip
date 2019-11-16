@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Media;
 
 namespace DipLib
 {
@@ -29,14 +30,62 @@ namespace DipLib
         public Point RotateR(Point origin, double angle)
         {
             return new Point(
-                (int)Math.Round(origin.X + (X - origin.X) * Math.Cos(angle) - (Y - origin.Y) * Math.Sin(angle)),
-                (int)Math.Round(origin.Y + (X - origin.X) * Math.Sin(angle) + (Y - origin.Y) * Math.Cos(angle))
+                (int) Math.Round(origin.X + (X - origin.X) * Math.Cos(angle) - (Y - origin.Y) * Math.Sin(angle)),
+                (int) Math.Round(origin.Y + (X - origin.X) * Math.Sin(angle) + (Y - origin.Y) * Math.Cos(angle))
             );
         }
 
         public Point RotateD(Point origin, double angle)
         {
             return RotateR(origin, angle / 180 * Math.PI);
+        }
+    }
+
+    public struct Line
+    {
+        public double A { get; set; }
+        public double B { get; set; }
+        public double C { get; set; }
+
+        public Line(double a, double b, double c)
+        {
+            A = a;
+            B = b;
+            C = c;
+        }
+
+        public Line(Point p1, Point p2) : this(p2.Y - p1.Y, p1.X - p2.X, p2.X * p1.Y - p1.X * p2.Y)
+        {
+        }
+
+        public Line(double h, Axis axis) : this(0, 0, -h)
+        {
+            switch (axis)
+            {
+                case Axis.X:
+                    A = 1;
+                    break;
+                case Axis.Y:
+                    B = 1;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
+            }
+        }
+
+        public enum Axis
+        {
+            X,
+            Y
+        }
+
+        public static Point? Intersection(Line l1, Line l2)
+        {
+            var m = l1.A * l2.B - l2.A * l1.B;
+            if (Math.Abs(m) <= double.Epsilon) return null;
+            var x = (l2.C * l1.B - l1.C * l2.B) / m;
+            var y = (l1.C * l2.A - l2.C * l1.A) / m;
+            return new Point(Convert.ToInt32(x), Convert.ToInt32(y));
         }
     }
 }

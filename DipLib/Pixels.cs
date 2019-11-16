@@ -50,6 +50,11 @@ namespace DipLib
         }
     }
 
+    public static class RGBColors
+    {
+        public static RGBPixel Transparent { get; } = new RGBPixel(0, 0, 0, 0);
+    }
+
     public struct HSLPixel
     {
         public byte A { get; set; }
@@ -72,13 +77,15 @@ namespace DipLib
         {
             float a = S * Math.Min(L, 1 - L);
             HSLPixel hsl = this;
+
             float f(float n)
             {
                 float k = (n + hsl.H / 30) % 12;
                 return hsl.L - a * Math.Max(Math.Min(Math.Min(k - 3, 9 - k), 1), -1);
             }
 
-            return new RGBPixel((byte)Math.Round(f(0) * 255), (byte)Math.Round(f(8) * 255), (byte)Math.Round(f(4) * 255), A);
+            return new RGBPixel((byte) Math.Round(f(0) * 255), (byte) Math.Round(f(8) * 255),
+                (byte) Math.Round(f(4) * 255), A);
         }
     }
 }
