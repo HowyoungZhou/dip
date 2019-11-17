@@ -244,6 +244,8 @@ namespace DipLib
                 (point) => point.RotateD(origin, angle) - newOrigin
             );
 
+            for (int i = 0; i < vertices.Length; i++) vertices[i] -= newOrigin;
+
             var borders = new Line[]
             {
                 new Line(vertices[3], vertices[0]),
@@ -321,19 +323,22 @@ namespace DipLib
 
         public ITransformableImage Scale(double kx, double ky, Interpolation interpolation)
         {
-            var res = Transform(
-                (int) Math.Ceiling(kx * PixelWidth),
-                (int) Math.Ceiling(ky * PixelHeight),
-                (point) => new Point(
-                    (int) Math.Round(kx * point.X),
-                    (int) Math.Round(ky * point.Y)
-                )
-            );
-
+            RGBImage res;
             switch (interpolation)
             {
                 case Interpolation.NearestNeighborInterpolation:
+                    res = Transform(
+                        (int) Math.Ceiling(kx * PixelWidth),
+                        (int) Math.Ceiling(ky * PixelHeight),
+                        (point) => new Point(
+                            (int) Math.Round(kx * point.X),
+                            (int) Math.Round(ky * point.Y)
+                        )
+                    );
                     res.NearestNeighborInterpolation(this, kx, ky);
+                    break;
+                case Interpolation.BilinearInterpolation:
+                    res = ScaleWithBilinearInterpolation(kx, ky);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(interpolation), interpolation, null);
@@ -357,6 +362,35 @@ namespace DipLib
                     this[x, y] = origin[x0, y0];
                 }
             }
+        }
+
+        private RGBImage ScaleWithBilinearInterpolation(double kx, double ky)
+        {
+            var res = new RGBImage((PixelWidth * kx).Round(), (PixelHeight * ky).Round());
+            for (int x = 0; x < PixelWidth - 1; x++)
+            {
+                for (int y = 0; y < PixelHeight - 1; y++)
+                {
+                    int nx1 = (kx * x).Round(), ny1 = (ky * y).Round();
+                    int nx2 = (kx * (x + 1)).Round(), ny2 = (ky * (y + 1)).Round();
+                    RGBPixel p11 = this[x, y].Value,
+                        p12 = this[x, y + 1].Value,
+                        p21 = this[x + 1, y].Value,
+                        p22 = this[x + 1, y + 1].Value;
+                    for (int nx = nx1; nx <= nx2; nx++)
+                    {
+                        for (int ny = ny1; ny <= ny2; ny++)
+                        {
+                            double k = (nx2 - nx1) * (ny2 - ny1);
+                            double m1 = nx2 - nx, m2 = nx - nx1;
+                            double n1 = ny2 - ny, n2 = ny - ny1;
+                            res[nx, ny] = m2 * n2 / k * p11 + m1 * n2 / k * p21 + m2 * n1 / k * p12 + m1 * n1 / k * p22;
+                        }
+                    }
+                }
+            }
+
+            return res;
         }
 
         public byte[] ToBrgaPixelsData()

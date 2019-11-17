@@ -41,6 +41,8 @@
         <CommandBinding Command="{x:Static local:DipLibCommands.Shear}" Executed="Shear" CanExecute="IsImageOpened" />
         <CommandBinding Command="{x:Static local:DipLibCommands.ScaleWithNNI}" Executed="ScaleWithNNI"
                         CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.ScaleWithBI}" Executed="ScaleWithBI"
+                        CanExecute="IsImageOpened" />
     </Window.CommandBindings>
 
     <Grid>
@@ -76,7 +78,7 @@
                               Command="{x:Static local:DipLibCommands.SaturationHistogramEqualization}" />
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="转换(_T)">
+            <MenuItem Header="变换(_T)">
                 <MenuItem Header="镜像(_M)">
                     <MenuItem Header="水平(_H)" Command="{x:Static local:DipLibCommands.MirrorHorizontally}" />
                     <MenuItem Header="垂直(_V)" Command="{x:Static local:DipLibCommands.MirrorVertically}" />
@@ -86,6 +88,7 @@
                 <MenuItem Header="切变(_S)" Command="{x:Static local:DipLibCommands.Shear}" />
                 <MenuItem Header="缩放(_C)">
                     <MenuItem Header="最近邻差值(_N)" Command="{x:Static local:DipLibCommands.ScaleWithNNI}" />
+                    <MenuItem Header="双线性插值(_B)" Command="{x:Static local:DipLibCommands.ScaleWithBI}" />
                 </MenuItem>
             </MenuItem>
         </Menu>

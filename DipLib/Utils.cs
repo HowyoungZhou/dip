@@ -1,8 +1,12 @@
 using System;
-using System.Windows.Media;
 
 namespace DipLib
 {
+    public static class Utils
+    {
+        public static int Round(this double n) => (int) Math.Round(n);
+    }
+    
     public struct Point
     {
         public int X { get; set; }

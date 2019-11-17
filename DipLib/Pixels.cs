@@ -26,6 +26,12 @@ namespace DipLib
             A = a;
         }
 
+        public static RGBPixel operator +(RGBPixel p1, RGBPixel p2) =>
+            new RGBPixel((byte) (p1.R + p2.R), (byte) (p1.G + p2.G), (byte) (p1.B + p2.B), (byte) (p1.A + p2.A));
+
+        public static RGBPixel operator *(double k, RGBPixel p2) =>
+            new RGBPixel((byte) (k * p2.R), (byte) (k * p2.G), (byte) (k * p2.B), (byte) (k * p2.A));
+
         public HSLPixel ToHSL()
         {
             float r = R / 255f, g = G / 255f, b = B / 255f;

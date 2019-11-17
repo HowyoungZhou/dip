@@ -112,5 +112,6 @@ namespace DipLib
     public enum Interpolation
     {
         NearestNeighborInterpolation,
+        BilinearInterpolation
     }
 }

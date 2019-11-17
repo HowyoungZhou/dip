@@ -265,5 +265,12 @@ namespace DipWpf
             if (!GetScaleRatios(out kx, out ky)) return;
             ImageHelper.ScaleWithNNI(kx, ky);
         }
+        
+        public void ScaleWithBI(object sender, ExecutedRoutedEventArgs e)
+        {
+            double kx, ky;
+            if (!GetScaleRatios(out kx, out ky)) return;
+            ImageHelper.ScaleWithBI(kx, ky);
+        }
     }
 }

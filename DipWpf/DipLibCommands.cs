@@ -37,5 +37,7 @@ namespace DipWpf
         public static RoutedCommand Shear { get; } = new RoutedCommand();
         
         public static RoutedCommand ScaleWithNNI { get; } = new RoutedCommand();
+        
+        public static RoutedCommand ScaleWithBI { get; } = new RoutedCommand();
     }
 }

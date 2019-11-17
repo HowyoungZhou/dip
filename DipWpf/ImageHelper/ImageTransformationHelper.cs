@@ -42,5 +42,13 @@ namespace DipWpf
                     Interpolation.NearestNeighborInterpolation);
             RefreshImage();
         }
+        
+        public void ScaleWithBI(double kx, double ky)
+        {
+            DipLibImage =
+                (IBitmapSource) (DipLibImage as ITransformableImage).Scale(kx, ky,
+                    Interpolation.BilinearInterpolation);
+            RefreshImage();
+        }
     }
 }
