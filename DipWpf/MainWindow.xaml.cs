@@ -261,15 +261,69 @@ namespace DipWpf
 
         public void ScaleWithNNI(object sender, ExecutedRoutedEventArgs e)
         {
-            double kx, ky;
-            if (!GetScaleRatios(out kx, out ky)) return;
+            var dialog = new InputDialog(new List<dynamic>
+            {
+                new DoubleInputItem()
+                {
+                    Label = "水平缩放",
+                    Value = 2,
+                    Minimum = 0,
+                    Maximum = 10,
+                    SmallChange = 0.1,
+                    LargeChange = 1,
+                    TickFrequency = 1,
+                    FractionDigits = 2
+                },
+                new DoubleInputItem()
+                {
+                    Label = "垂直缩放",
+                    Value = 2,
+                    Minimum = 0,
+                    Maximum = 10,
+                    SmallChange = 0.1,
+                    LargeChange = 1,
+                    TickFrequency = 1,
+                    FractionDigits = 2
+                },
+            });
+
+            if (!dialog.ShowDialog().Value) return;
+            double kx = ((DoubleInputItem) dialog.InputItems[0]).Value;
+            double ky = ((DoubleInputItem) dialog.InputItems[1]).Value;
             ImageHelper.ScaleWithNNI(kx, ky);
         }
         
         public void ScaleWithBI(object sender, ExecutedRoutedEventArgs e)
         {
-            double kx, ky;
-            if (!GetScaleRatios(out kx, out ky)) return;
+            var dialog = new InputDialog(new List<dynamic>
+            {
+                new DoubleInputItem()
+                {
+                    Label = "水平缩放",
+                    Value = 2,
+                    Minimum = 1,
+                    Maximum = 10,
+                    SmallChange = 0.1,
+                    LargeChange = 1,
+                    TickFrequency = 1,
+                    FractionDigits = 2
+                },
+                new DoubleInputItem()
+                {
+                    Label = "垂直缩放",
+                    Value = 2,
+                    Minimum = 1,
+                    Maximum = 10,
+                    SmallChange = 0.1,
+                    LargeChange = 1,
+                    TickFrequency = 1,
+                    FractionDigits = 2
+                },
+            });
+
+            if (!dialog.ShowDialog().Value) return;
+            double kx = ((DoubleInputItem) dialog.InputItems[0]).Value;
+            double ky = ((DoubleInputItem) dialog.InputItems[1]).Value;
             ImageHelper.ScaleWithBI(kx, ky);
         }
     }
