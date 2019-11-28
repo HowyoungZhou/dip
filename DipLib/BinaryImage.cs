@@ -3,7 +3,7 @@ using System.Windows.Media.Imaging;
 
 namespace DipLib
 {
-    public class BinaryImage : Image<BinaryPixel>
+    public class BinaryImage : Image<BinaryPixel>, IBitmapSource
     {
         public BinaryImage(int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight) { }
 
@@ -165,7 +165,7 @@ namespace DipLib
             return Dilation(structElement).Erosion(structElement);
         }
 
-        public override BitmapSource ToBitmapSource(double dpiX, double dpiY)
+        public BitmapSource ToBitmapSource(double dpiX, double dpiY)
         {
             return BitmapSource.Create(PixelWidth, PixelHeight, dpiX, dpiY, PixelFormats.Gray8, BitmapPalettes.Gray256, ToPixelsData(), PixelWidth);
         }

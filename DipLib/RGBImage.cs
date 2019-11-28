@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 
 namespace DipLib
 {
-    public class RGBImage : Image<RGBPixel?>, ITransformableImage
+    public class RGBImage : Image<RGBPixel?>, ITransformableImage, IBitmapSource
     {
         public RGBImage(RGBPixel?[,] pixels) : base(pixels)
         {
@@ -413,7 +413,7 @@ namespace DipLib
             return data;
         }
 
-        public override BitmapSource ToBitmapSource(double dpiX, double dpiY)
+        public BitmapSource ToBitmapSource(double dpiX, double dpiY)
         {
             return BitmapSource.Create(PixelWidth, PixelHeight, dpiX, dpiY, PixelFormats.Bgra32, null,
                 ToBrgaPixelsData(), PixelWidth * 4);

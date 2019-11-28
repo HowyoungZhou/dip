@@ -28,7 +28,7 @@ namespace DipLib
         ITransformableImage Scale(double kx, double ky, Interpolation interpolation);
     }
 
-    public abstract class Image<T> : IEnumerable<T>, IBitmapSource
+    public abstract class Image<T> : IEnumerable<T>
     {
         public int PixelHeight => Pixels.GetLength(1);
 
@@ -105,8 +105,6 @@ namespace DipLib
 
             return this;
         }
-
-        public abstract BitmapSource ToBitmapSource(double dpiX, double dpiY);
     }
 
     public enum Interpolation

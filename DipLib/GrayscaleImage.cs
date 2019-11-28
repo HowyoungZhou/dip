@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 
 namespace DipLib
 {
-    public class GrayscaleImage : Image<byte>
+    public class GrayscaleImage : Image<byte>, IBitmapSource
     {
         public GrayscaleImage(byte[,] pixels) : base(pixels) { }
 
@@ -101,7 +101,7 @@ namespace DipLib
             return data;
         }
 
-        public override BitmapSource ToBitmapSource(double dpiX, double dpiY)
+        public BitmapSource ToBitmapSource(double dpiX, double dpiY)
         {
             return BitmapSource.Create(PixelWidth, PixelHeight, dpiX, dpiY, PixelFormats.Gray8, BitmapPalettes.Gray256, ToPixelsData(), PixelWidth);
         }
