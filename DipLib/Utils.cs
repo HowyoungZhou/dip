@@ -4,9 +4,13 @@ namespace DipLib
 {
     public static class Utils
     {
-        public static int Round(this double n) => (int) Math.Round(n);
+        public static int Round(this double n) => (int)Math.Round(n);
+
+        public static float ReLU(this float n) => n < 0 ? 0 : n;
+
+        public static double Rearrange(this double n, double originMin, double originMax, double min, double max) => (max - originMax) / (min - originMin) * (n - originMin) + originMax;
     }
-    
+
     public struct Point
     {
         public int X { get; set; }
@@ -34,8 +38,8 @@ namespace DipLib
         public Point RotateR(Point origin, double angle)
         {
             return new Point(
-                (int) Math.Round(origin.X + (X - origin.X) * Math.Cos(angle) - (Y - origin.Y) * Math.Sin(angle)),
-                (int) Math.Round(origin.Y + (X - origin.X) * Math.Sin(angle) + (Y - origin.Y) * Math.Cos(angle))
+                (int)Math.Round(origin.X + (X - origin.X) * Math.Cos(angle) - (Y - origin.Y) * Math.Sin(angle)),
+                (int)Math.Round(origin.Y + (X - origin.X) * Math.Sin(angle) + (Y - origin.Y) * Math.Cos(angle))
             );
         }
 

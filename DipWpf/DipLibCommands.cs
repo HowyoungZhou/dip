@@ -33,11 +33,17 @@ namespace DipWpf
         public static RoutedCommand Translate { get; } = new RoutedCommand();
 
         public static RoutedCommand Rotate { get; } = new RoutedCommand();
-        
+
         public static RoutedCommand Shear { get; } = new RoutedCommand();
-        
+
         public static RoutedCommand ScaleWithNNI { get; } = new RoutedCommand();
-        
+
         public static RoutedCommand ScaleWithBI { get; } = new RoutedCommand();
+
+        public static RoutedCommand MeanFilter { get; } = new RoutedCommand();
+
+        public static RoutedCommand LaplacianFilter { get; } = new RoutedCommand();
+
+        public static RoutedCommand ExtendedLaplacianFilter { get; } = new RoutedCommand();
     }
 }

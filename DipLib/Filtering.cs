@@ -5,6 +5,12 @@ namespace DipLib
     public interface IFilterableImage
     {
         IFilterableImage Filter(Filter filter);
+
+        IFilterableImage MeanFilter(int size);
+
+        IFilterableImage LaplacianFilter();
+
+        IFilterableImage ExtendedLaplacianFilter();
     }
 
     public class Filter : Image<double>
@@ -42,7 +48,7 @@ namespace DipLib
     {
         public static Filter Mean(int size = 3)
         {
-            var filter = new Filter(size,size);
+            var filter = new Filter(size, size);
             filter.Pipeline(pixel => 1);
             filter.Normalize();
             return filter;
@@ -50,12 +56,12 @@ namespace DipLib
 
         public static Filter Laplacian()
         {
-            return new Filter(new double[,] {{0, 1, 0}, {1, -4, 1}, {0, 1, 0}});
+            return new Filter(new double[,] {{0, -1, 0}, {-1, 5, -1}, {0, -1, 0}});
         }
 
         public static Filter ExtendedLaplacian()
         {
-            return new Filter(new double[,] {{1, 1, 1}, {1, -4, 1}, {1, 1, 1}});
+            return new Filter(new double[,] {{-1, -1, -1}, {-1, 9, -1}, {-1, -1, -1}});
         }
     }
 }

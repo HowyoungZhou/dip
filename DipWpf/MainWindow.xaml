@@ -43,6 +43,12 @@
                         CanExecute="IsImageOpened" />
         <CommandBinding Command="{x:Static local:DipLibCommands.ScaleWithBI}" Executed="ScaleWithBI"
                         CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.MeanFilter}" Executed="MeanFilter"
+                        CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.LaplacianFilter}" Executed="LaplacianFilter"
+                        CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.ExtendedLaplacianFilter}" Executed="ExtendedLaplacianFilter"
+                        CanExecute="IsImageOpened" />
     </Window.CommandBindings>
 
     <Grid>
@@ -90,6 +96,11 @@
                     <MenuItem Header="最近邻差值(_N)" Command="{x:Static local:DipLibCommands.ScaleWithNNI}" />
                     <MenuItem Header="双线性插值(_B)" Command="{x:Static local:DipLibCommands.ScaleWithBI}" />
                 </MenuItem>
+            </MenuItem>
+            <MenuItem Header="滤波(_F)">
+                <MenuItem Header="均值滤波(_M)" Command="{x:Static local:DipLibCommands.MeanFilter}" />
+                <MenuItem Header="拉普拉斯滤波(_L)" Command="{x:Static local:DipLibCommands.LaplacianFilter}" />
+                <MenuItem Header="扩展拉普拉斯滤波(_E)" Command="{x:Static local:DipLibCommands.ExtendedLaplacianFilter}" />
             </MenuItem>
         </Menu>
         <Image Source="{Binding Path=ImageHelper.Image}" Grid.Row="1" />

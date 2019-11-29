@@ -52,6 +52,10 @@ namespace DipLib
 
         public delegate T PixelPositionPipelineDelegate(T pixel, Point position);
 
+        public delegate void PixelHandlerDelegate(T pixel);
+
+        public delegate void PixelPositionHandlerDelegate(T pixel, Point position);
+
         public delegate Point TransformDelegate(Point point);
 
         public Image(int pixelWidth, int pixelHeight)
@@ -100,6 +104,32 @@ namespace DipLib
                 for (int x = 0; x < PixelWidth; x++)
                 {
                     Pixels[x, y] = process(Pixels[x, y], new Point(x, y));
+                }
+            }
+
+            return this;
+        }
+
+        public Image<T> ForEach(PixelHandlerDelegate process)
+        {
+            for (int y = 0; y < PixelHeight; y++)
+            {
+                for (int x = 0; x < PixelWidth; x++)
+                {
+                    process(Pixels[x, y]);
+                }
+            }
+
+            return this;
+        }
+
+        public Image<T> ForEach(PixelPositionHandlerDelegate process)
+        {
+            for (int y = 0; y < PixelHeight; y++)
+            {
+                for (int x = 0; x < PixelWidth; x++)
+                {
+                    process(Pixels[x, y], new Point(x, y));
                 }
             }
 

@@ -292,7 +292,7 @@ namespace DipWpf
             double ky = ((DoubleInputItem) dialog.InputItems[1]).Value;
             ImageHelper.ScaleWithNNI(kx, ky);
         }
-        
+
         public void ScaleWithBI(object sender, ExecutedRoutedEventArgs e)
         {
             var dialog = new InputDialog(new List<dynamic>
@@ -325,6 +325,36 @@ namespace DipWpf
             double kx = ((DoubleInputItem) dialog.InputItems[0]).Value;
             double ky = ((DoubleInputItem) dialog.InputItems[1]).Value;
             ImageHelper.ScaleWithBI(kx, ky);
+        }
+
+        private void MeanFilter(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dialog = new InputDialog(new List<dynamic>
+            {
+                new IntInputItem()
+                {
+                    Label = "滤波器大小",
+                    Minimum = 1,
+                    Value = 3,
+                    Maximum = 10,
+                    SmallChange = 1,
+                    LargeChange = 1,
+                    TickFrequency = 1,
+                },
+            });
+            if (!dialog.ShowDialog().Value) return;
+            int size = ((IntInputItem)dialog.InputItems[0]).Value;
+            ImageHelper.MeanFilter(size);
+        }
+
+        private void LaplacianFilter(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.LaplacianFilter();
+        }
+
+        private void ExtendedLaplacianFilter(object sender, ExecutedRoutedEventArgs e)
+        {
+            ImageHelper.ExtendedLaplacianFilter();
         }
     }
 }
