@@ -96,7 +96,7 @@ namespace DipLib
             foreach (var pixel in this)
             {
                 Debug.Assert(pixel != null, nameof(pixel) + " != null");
-                int level = (int)Math.Round(pixel.Value.ToHSL().S * (levels - 1));
+                int level = (int) Math.Round(pixel.Value.ToHSL().S * (levels - 1));
                 res[level]++;
             }
 
@@ -126,7 +126,7 @@ namespace DipLib
             {
                 Debug.Assert(pixel != null, nameof(pixel) + " != null");
                 var hsl = pixel.Value.ToHSL();
-                int level = (int)Math.Round(hsl.S * (levels - 1));
+                int level = (int) Math.Round(hsl.S * (levels - 1));
                 hsl.S = Convert.ToSingle((cdf[level] - minCDF) / denominator);
                 return hsl.ToRGB();
             });
@@ -138,7 +138,7 @@ namespace DipLib
             foreach (var pixel in this)
             {
                 Debug.Assert(pixel != null, nameof(pixel) + " != null");
-                int level = (int)Math.Round(pixel.Value.ToHSL().L * (levels - 1));
+                int level = (int) Math.Round(pixel.Value.ToHSL().L * (levels - 1));
                 res[level]++;
             }
 
@@ -168,7 +168,7 @@ namespace DipLib
             {
                 Debug.Assert(pixel != null, nameof(pixel) + " != null");
                 var hsl = pixel.Value.ToHSL();
-                int level = (int)Math.Round(hsl.L * (levels - 1));
+                int level = (int) Math.Round(hsl.L * (levels - 1));
                 hsl.L = Convert.ToSingle((cdf[level] - minCDF) / denominator);
                 return hsl.ToRGB();
             });
@@ -284,7 +284,7 @@ namespace DipLib
 
         private RGBPixel FindNearestInRow(int x, int y, int start, int end)
         {
-            for (int cursor = 1; ; cursor++)
+            for (int cursor = 1;; cursor++)
             {
                 if (x - cursor >= start && Pixels[x - cursor, y] != null) return Pixels[x - cursor, y].Value;
                 if (x + cursor <= end && Pixels[x + cursor, y] != null) return Pixels[x + cursor, y].Value;
@@ -296,11 +296,11 @@ namespace DipLib
         public ITransformableImage Shear(double dx, double dy)
         {
             var res = Transform(
-                (int)Math.Ceiling(PixelWidth + dx * PixelHeight),
-                (int)Math.Ceiling(PixelHeight + dy * PixelWidth),
+                (int) Math.Ceiling(PixelWidth + dx * PixelHeight),
+                (int) Math.Ceiling(PixelHeight + dy * PixelWidth),
                 (point) => new Point(
-                    (int)Math.Round(point.X + dx * point.Y),
-                    (int)Math.Round(point.Y + dy * point.X)
+                    (int) Math.Round(point.X + dx * point.Y),
+                    (int) Math.Round(point.Y + dy * point.X)
                 )
             );
 
@@ -309,9 +309,9 @@ namespace DipLib
                 for (int y = 0; y < res.PixelHeight; y++)
                 {
                     if (res[x, y] != null) continue;
-                    int x0 = (int)Math.Round((x - y * dx) / (1 - dx * dy));
+                    int x0 = (int) Math.Round((x - y * dx) / (1 - dx * dy));
                     if (x0 < 0 || x0 >= PixelWidth) continue;
-                    int y0 = (int)Math.Round((y - x * dy) / (1 - dx * dy));
+                    int y0 = (int) Math.Round((y - x * dy) / (1 - dx * dy));
                     if (y0 < 0 || y0 >= PixelHeight) continue;
                     res[x, y] = this[x0, y0];
                 }
@@ -328,11 +328,11 @@ namespace DipLib
             {
                 case Interpolation.NearestNeighborInterpolation:
                     res = Transform(
-                        (int)Math.Ceiling(kx * PixelWidth),
-                        (int)Math.Ceiling(ky * PixelHeight),
+                        (int) Math.Ceiling(kx * PixelWidth),
+                        (int) Math.Ceiling(ky * PixelHeight),
                         (point) => new Point(
-                            (int)Math.Round(kx * point.X),
-                            (int)Math.Round(ky * point.Y)
+                            (int) Math.Round(kx * point.X),
+                            (int) Math.Round(ky * point.Y)
                         )
                     );
                     res.NearestNeighborInterpolation(this, kx, ky);
@@ -355,9 +355,9 @@ namespace DipLib
                 for (int y = 0; y < PixelHeight; y++)
                 {
                     if (this[x, y] != null) continue;
-                    int x0 = (int)Math.Round(x / kx);
+                    int x0 = (int) Math.Round(x / kx);
                     if (x0 < 0 || x0 >= origin.PixelWidth) continue;
-                    int y0 = (int)Math.Round(y / ky);
+                    int y0 = (int) Math.Round(y / ky);
                     if (y0 < 0 || y0 >= origin.PixelHeight) continue;
                     this[x, y] = origin[x0, y0];
                 }
@@ -418,7 +418,7 @@ namespace DipLib
             return BitmapSource.Create(PixelWidth, PixelHeight, dpiX, dpiY, PixelFormats.Bgra32, null,
                 ToBrgaPixelsData(), PixelWidth * 4);
         }
-        
+
         public RGBImage Map(PixelPipelineDelegate process)
         {
             var res = new RGBImage(PixelWidth, PixelHeight);
@@ -457,7 +457,7 @@ namespace DipLib
 
                 Debug.Assert(pixel != null, nameof(pixel) + " != null");
                 var newPixel = pixel.Value.ToHSL();
-                newPixel.L = Convert.ToSingle(res).ReLU();
+                newPixel.L = Convert.ToSingle(res).LimitTo(0, 1);
                 return newPixel.ToRGB();
             });
         }
