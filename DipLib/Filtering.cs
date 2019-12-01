@@ -46,22 +46,17 @@ namespace DipLib
 
     public static class Filters
     {
+        public static Filter Laplacian { get; } = new Filter(new double[,] {{0, -1, 0}, {-1, 5, -1}, {0, -1, 0}});
+
+        public static Filter ExtendedLaplacian { get; } =
+            new Filter(new double[,] {{-1, -1, -1}, {-1, 9, -1}, {-1, -1, -1}});
+
         public static Filter Mean(int size = 3)
         {
             var filter = new Filter(size, size);
             filter.Pipeline(pixel => 1);
             filter.Normalize();
             return filter;
-        }
-
-        public static Filter Laplacian()
-        {
-            return new Filter(new double[,] {{0, -1, 0}, {-1, 5, -1}, {0, -1, 0}});
-        }
-
-        public static Filter ExtendedLaplacian()
-        {
-            return new Filter(new double[,] {{-1, -1, -1}, {-1, 9, -1}, {-1, -1, -1}});
         }
     }
 }

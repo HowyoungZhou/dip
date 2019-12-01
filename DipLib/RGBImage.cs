@@ -451,7 +451,7 @@ namespace DipLib
 
                         var targetPixel = this[targetPos];
                         Debug.Assert(targetPixel != null);
-                        res += Convert.ToSingle(filter[x, y] * targetPixel.Value.ToHSL().L);
+                        res += filter[x, y] * targetPixel.Value.ToHSL().L;
                     }
                 }
 
@@ -464,8 +464,8 @@ namespace DipLib
 
         public IFilterableImage MeanFilter(int size) => Filter(Filters.Mean(size));
 
-        public IFilterableImage LaplacianFilter() => Filter(Filters.Laplacian());
+        public IFilterableImage LaplacianFilter() => Filter(Filters.Laplacian);
 
-        public IFilterableImage ExtendedLaplacianFilter() => Filter(Filters.ExtendedLaplacian());
+        public IFilterableImage ExtendedLaplacianFilter() => Filter(Filters.ExtendedLaplacian);
     }
 }
