@@ -433,34 +433,14 @@ namespace DipLib
             return res;
         }
 
-        public IFilterableImage Filter(Filter filter)
+        public HslImage ToHslImage()
         {
-            return Map((pixel, position) =>
-            {
-                double res = 0;
-                for (int x = 0; x < filter.PixelWidth; x++)
-                {
-                    for (int y = 0; y < filter.PixelHeight; y++)
-                    {
-                        var targetPos = position - filter.Origin + new Point(x, y);
-
-                        if (targetPos.X < 0) targetPos.X = 0;
-                        else if (targetPos.X >= PixelWidth) targetPos.X = PixelWidth - 1;
-                        if (targetPos.Y < 0) targetPos.Y = 0;
-                        else if (targetPos.Y >= PixelHeight) targetPos.Y = PixelHeight - 1;
-
-                        var targetPixel = this[targetPos];
-                        Debug.Assert(targetPixel != null);
-                        res += filter[x, y] * targetPixel.Value.ToHsl().L;
-                    }
-                }
-
-                Debug.Assert(pixel != null, nameof(pixel) + " != null");
-                var newPixel = pixel.Value.ToHsl();
-                newPixel.L = Convert.ToSingle(res).LimitTo(0, 1);
-                return newPixel.ToRgb();
-            });
+            var res = new HslImage(PixelWidth, PixelHeight);
+            ForEach((pixel, position) => res[position] = pixel.Value.ToHsl());
+            return res;
         }
+
+        public IFilterableImage Filter(Filter filter) => ((HslImage) ToHslImage().Filter(filter)).ToRgbImage();
 
         public IFilterableImage MeanFilter(int size) => Filter(Filters.Mean(size));
 

@@ -7,6 +7,8 @@ namespace DipLib
         public static int Round(this double n) => (int) Math.Round(n);
 
         public static float LimitTo(this float n, float min, float max) => n < min ? min : n > max ? max : n;
+        
+        public static int LimitTo(this int n, int min, int max) => n < min ? min : n > max ? max : n;
 
         public static double Rearrange(this double n, double originMin, double originMax, double min, double max) =>
             (max - originMax) / (min - originMin) * (n - originMin) + originMax;
