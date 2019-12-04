@@ -34,7 +34,7 @@ namespace DipWpf
         {
             FileName = fileName;
             Image = OriginImage = new BitmapImage(new Uri(fileName));
-            GetRGBImage();
+            GetRgbImage();
         }
 
         private void NotifyPropertyChanged(String name)

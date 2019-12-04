@@ -6,13 +6,13 @@ namespace DipWpf
 {
     public partial class ImageHelper
     {
-        private void GetRGBImage()
+        private void GetRgbImage()
         {
-            if (DipLibImage is RGBImage) return;
+            if (DipLibImage is RgbImage) return;
             Image = new FormatConvertedBitmap(OriginImage, PixelFormats.Bgra32, null, 0);
             byte[] pixels = new byte[Image.PixelWidth * Image.PixelHeight * 4];
             Image.CopyPixels(pixels, Image.PixelWidth * 4, 0);
-            DipLibImage = new RGBImage(pixels, Image.PixelWidth, Image.PixelHeight);
+            DipLibImage = new RgbImage(pixels, Image.PixelWidth, Image.PixelHeight);
         }
 
         private void GetGrayscaleImage()
@@ -35,8 +35,8 @@ namespace DipWpf
             if (DipLibImage is GrayscaleImage) (DipLibImage as GrayscaleImage).EnhanceVisibility();
             else
             {
-                if (!(DipLibImage is RGBImage)) GetRGBImage();
-                (DipLibImage as RGBImage).EnhanceVisibility();
+                if (!(DipLibImage is RgbImage)) GetRgbImage();
+                (DipLibImage as RgbImage).EnhanceVisibility();
             }
             RefreshImage();
         }
@@ -46,8 +46,8 @@ namespace DipWpf
             if (DipLibImage is GrayscaleImage) (DipLibImage as GrayscaleImage).LightnessLinearStretch();
             else
             {
-                if (!(DipLibImage is RGBImage)) GetRGBImage();
-                (DipLibImage as RGBImage).LightnessLinearStretch();
+                if (!(DipLibImage is RgbImage)) GetRgbImage();
+                (DipLibImage as RgbImage).LightnessLinearStretch();
             }
             RefreshImage();
         }
@@ -61,15 +61,15 @@ namespace DipWpf
 
         public void SaturationHistogramEqualization()
         {
-            GetRGBImage();
-            (DipLibImage as RGBImage).SaturationHistogramEqualization(101);
+            GetRgbImage();
+            (DipLibImage as RgbImage).SaturationHistogramEqualization(101);
             RefreshImage();
         }
 
         public void LightnessHistogramEqualization()
         {
-            GetRGBImage();
-            (DipLibImage as RGBImage).LightnessHistogramEqualization(101);
+            GetRgbImage();
+            (DipLibImage as RgbImage).LightnessHistogramEqualization(101);
             RefreshImage();
         }
     }

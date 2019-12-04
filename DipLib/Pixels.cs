@@ -8,7 +8,7 @@ namespace DipLib
         Black
     }
 
-    public struct RGBPixel
+    public struct RgbPixel
     {
         public byte A { get; set; }
 
@@ -18,7 +18,7 @@ namespace DipLib
 
         public byte B { get; set; }
 
-        public RGBPixel(byte r, byte g, byte b, byte a)
+        public RgbPixel(byte r, byte g, byte b, byte a)
         {
             R = r;
             G = g;
@@ -26,13 +26,13 @@ namespace DipLib
             A = a;
         }
 
-        public static RGBPixel operator +(RGBPixel p1, RGBPixel p2) =>
-            new RGBPixel((byte) (p1.R + p2.R), (byte) (p1.G + p2.G), (byte) (p1.B + p2.B), (byte) (p1.A + p2.A));
+        public static RgbPixel operator +(RgbPixel p1, RgbPixel p2) =>
+            new RgbPixel((byte) (p1.R + p2.R), (byte) (p1.G + p2.G), (byte) (p1.B + p2.B), (byte) (p1.A + p2.A));
 
-        public static RGBPixel operator *(double k, RGBPixel p2) =>
-            new RGBPixel((byte) (k * p2.R), (byte) (k * p2.G), (byte) (k * p2.B), (byte) (k * p2.A));
+        public static RgbPixel operator *(double k, RgbPixel p2) =>
+            new RgbPixel((byte) (k * p2.R), (byte) (k * p2.G), (byte) (k * p2.B), (byte) (k * p2.A));
 
-        public HSLPixel ToHSL()
+        public HslPixel ToHsl()
         {
             float r = R / 255f, g = G / 255f, b = B / 255f;
             float min = Math.Min(r, Math.Min(g, b));
@@ -52,16 +52,16 @@ namespace DipLib
                 else h = 60 * (r - g) / (max - min) + 240;
             }
 
-            return new HSLPixel(h, s, l, A);
+            return new HslPixel(h, s, l, A);
         }
     }
 
-    public static class RGBColors
+    public static class RgbColors
     {
-        public static RGBPixel Transparent { get; } = new RGBPixel(0, 0, 0, 0);
+        public static RgbPixel Transparent { get; } = new RgbPixel(0, 0, 0, 0);
     }
 
-    public struct HSLPixel
+    public struct HslPixel
     {
         public byte A { get; set; }
 
@@ -71,7 +71,7 @@ namespace DipLib
 
         public float L { get; set; }
 
-        public HSLPixel(float h, float s, float l, byte a)
+        public HslPixel(float h, float s, float l, byte a)
         {
             H = h;
             S = s;
@@ -79,19 +79,19 @@ namespace DipLib
             A = a;
         }
 
-        public RGBPixel ToRGB()
+        public RgbPixel ToRgb()
         {
             float a = S * Math.Min(L, 1 - L);
-            HSLPixel hsl = this;
+            HslPixel hsl = this;
 
-            float f(float n)
+            float F(float n)
             {
                 float k = (n + hsl.H / 30) % 12;
                 return hsl.L - a * Math.Max(Math.Min(Math.Min(k - 3, 9 - k), 1), -1);
             }
 
-            return new RGBPixel((byte) Math.Round(f(0) * 255), (byte) Math.Round(f(8) * 255),
-                (byte) Math.Round(f(4) * 255), A);
+            return new RgbPixel((byte) Math.Round(F(0) * 255), (byte) Math.Round(F(8) * 255),
+                (byte) Math.Round(F(4) * 255), A);
         }
     }
 }

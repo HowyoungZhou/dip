@@ -67,7 +67,7 @@ namespace DipLib
             return res;
         }
 
-        private long[] GetHistogramCDF()
+        private long[] GetHistogramCdf()
         {
             var histogram = GetHistogram();
             var res = new long[256];
@@ -82,10 +82,10 @@ namespace DipLib
 
         public void HistogramEqualization()
         {
-            var cdf = GetHistogramCDF();
-            var minCDF = cdf.Min();
-            double denominator = PixelWidth * PixelHeight - minCDF;
-            Pipeline((pixel) => Convert.ToByte(Math.Round((cdf[pixel] - minCDF) / denominator * 255)));
+            var cdf = GetHistogramCdf();
+            var minCdf = cdf.Min();
+            double denominator = PixelWidth * PixelHeight - minCdf;
+            Pipeline((pixel) => Convert.ToByte(Math.Round((cdf[pixel] - minCdf) / denominator * 255)));
         }
 
         public byte[] ToPixelsData()

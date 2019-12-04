@@ -35,7 +35,7 @@ namespace DipWpf
             RefreshImage();
         }
 
-        public void ScaleWithNNI(double kx, double ky)
+        public void ScaleWithNni(double kx, double ky)
         {
             DipLibImage =
                 (IBitmapSource) (DipLibImage as ITransformableImage).Scale(kx, ky,
@@ -43,7 +43,7 @@ namespace DipWpf
             RefreshImage();
         }
         
-        public void ScaleWithBI(double kx, double ky)
+        public void ScaleWithBi(double kx, double ky)
         {
             DipLibImage =
                 (IBitmapSource) (DipLibImage as ITransformableImage).Scale(kx, ky,

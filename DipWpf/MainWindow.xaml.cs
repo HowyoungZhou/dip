@@ -224,42 +224,7 @@ namespace DipWpf
             ImageHelper.Shear(dx, dy);
         }
 
-        public bool GetScaleRatios(out double kx, out double ky)
-        {
-            kx = ky = 0;
-            var dialog = new InputDialog(new List<dynamic>
-            {
-                new DoubleInputItem()
-                {
-                    Label = "水平缩放",
-                    Value = 1,
-                    Minimum = 0,
-                    Maximum = 10,
-                    SmallChange = 0.1,
-                    LargeChange = 1,
-                    TickFrequency = 1,
-                    FractionDigits = 2
-                },
-                new DoubleInputItem()
-                {
-                    Label = "垂直缩放",
-                    Value = 1,
-                    Minimum = 0,
-                    Maximum = 10,
-                    SmallChange = 0.1,
-                    LargeChange = 1,
-                    TickFrequency = 1,
-                    FractionDigits = 2
-                },
-            });
-
-            if (!dialog.ShowDialog().Value) return false;
-            kx = ((DoubleInputItem) dialog.InputItems[0]).Value;
-            ky = ((DoubleInputItem) dialog.InputItems[1]).Value;
-            return true;
-        }
-
-        public void ScaleWithNNI(object sender, ExecutedRoutedEventArgs e)
+        public void ScaleWithNni(object sender, ExecutedRoutedEventArgs e)
         {
             var dialog = new InputDialog(new List<dynamic>
             {
@@ -290,10 +255,10 @@ namespace DipWpf
             if (!dialog.ShowDialog().Value) return;
             double kx = ((DoubleInputItem) dialog.InputItems[0]).Value;
             double ky = ((DoubleInputItem) dialog.InputItems[1]).Value;
-            ImageHelper.ScaleWithNNI(kx, ky);
+            ImageHelper.ScaleWithNni(kx, ky);
         }
 
-        public void ScaleWithBI(object sender, ExecutedRoutedEventArgs e)
+        public void ScaleWithBi(object sender, ExecutedRoutedEventArgs e)
         {
             var dialog = new InputDialog(new List<dynamic>
             {
@@ -324,7 +289,7 @@ namespace DipWpf
             if (!dialog.ShowDialog().Value) return;
             double kx = ((DoubleInputItem) dialog.InputItems[0]).Value;
             double ky = ((DoubleInputItem) dialog.InputItems[1]).Value;
-            ImageHelper.ScaleWithBI(kx, ky);
+            ImageHelper.ScaleWithBi(kx, ky);
         }
 
         private void MeanFilter(object sender, ExecutedRoutedEventArgs e)

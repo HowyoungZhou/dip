@@ -39,9 +39,9 @@
                         CanExecute="IsImageOpened" />
         <CommandBinding Command="{x:Static local:DipLibCommands.Rotate}" Executed="Rotate" CanExecute="IsImageOpened" />
         <CommandBinding Command="{x:Static local:DipLibCommands.Shear}" Executed="Shear" CanExecute="IsImageOpened" />
-        <CommandBinding Command="{x:Static local:DipLibCommands.ScaleWithNNI}" Executed="ScaleWithNNI"
+        <CommandBinding Command="{x:Static local:DipLibCommands.ScaleWithNni}" Executed="ScaleWithNni"
                         CanExecute="IsImageOpened" />
-        <CommandBinding Command="{x:Static local:DipLibCommands.ScaleWithBI}" Executed="ScaleWithBI"
+        <CommandBinding Command="{x:Static local:DipLibCommands.ScaleWithBi}" Executed="ScaleWithBi"
                         CanExecute="IsImageOpened" />
         <CommandBinding Command="{x:Static local:DipLibCommands.MeanFilter}" Executed="MeanFilter"
                         CanExecute="IsImageOpened" />
@@ -93,8 +93,8 @@
                 <MenuItem Header="旋转(_R)" Command="{x:Static local:DipLibCommands.Rotate}" />
                 <MenuItem Header="切变(_S)" Command="{x:Static local:DipLibCommands.Shear}" />
                 <MenuItem Header="缩放(_C)">
-                    <MenuItem Header="最近邻差值(_N)" Command="{x:Static local:DipLibCommands.ScaleWithNNI}" />
-                    <MenuItem Header="双线性插值(_B)" Command="{x:Static local:DipLibCommands.ScaleWithBI}" />
+                    <MenuItem Header="最近邻差值(_N)" Command="{x:Static local:DipLibCommands.ScaleWithNni}" />
+                    <MenuItem Header="双线性插值(_B)" Command="{x:Static local:DipLibCommands.ScaleWithBi}" />
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="滤波(_F)">

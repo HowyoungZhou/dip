@@ -11,17 +11,17 @@ using System.Windows.Media.Imaging;
 
 namespace DipLib
 {
-    public class RGBImage : Image<RGBPixel?>, ITransformableImage, IBitmapSource, IFilterableImage
+    public class RgbImage : Image<RgbPixel?>, ITransformableImage, IBitmapSource, IFilterableImage
     {
-        public RGBImage(RGBPixel?[,] pixels) : base(pixels)
+        public RgbImage(RgbPixel?[,] pixels) : base(pixels)
         {
         }
 
-        public RGBImage(int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight)
+        public RgbImage(int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight)
         {
         }
 
-        public RGBImage(byte[] bgraPixels, int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight)
+        public RgbImage(byte[] bgraPixels, int pixelWidth, int pixelHeight) : base(pixelWidth, pixelHeight)
         {
             for (int x = 0; x < pixelWidth; x++)
             {
@@ -33,7 +33,7 @@ namespace DipLib
                     // offset + 1: G
                     // offset + 2: R
                     // offset + 3: A
-                    Pixels[x, y] = new RGBPixel(bgraPixels[offset + 2], bgraPixels[offset + 1], bgraPixels[offset + 0],
+                    Pixels[x, y] = new RgbPixel(bgraPixels[offset + 2], bgraPixels[offset + 1], bgraPixels[offset + 0],
                         bgraPixels[offset + 3]);
                 }
             }
@@ -45,7 +45,7 @@ namespace DipLib
             foreach (var pixel in this)
             {
                 Debug.Assert(pixel != null, nameof(pixel) + " != null");
-                float l = pixel.Value.ToHSL().L;
+                float l = pixel.Value.ToHsl().L;
                 if (l > max) max = l;
             }
 
@@ -58,7 +58,7 @@ namespace DipLib
             foreach (var pixel in this)
             {
                 Debug.Assert(pixel != null, nameof(pixel) + " != null");
-                float l = pixel.Value.ToHSL().L;
+                float l = pixel.Value.ToHsl().L;
                 if (l < min) min = l;
             }
 
@@ -71,9 +71,9 @@ namespace DipLib
             Pipeline((pixel) =>
             {
                 Debug.Assert(pixel != null, nameof(pixel) + " != null");
-                var hsl = pixel.Value.ToHSL();
+                var hsl = pixel.Value.ToHsl();
                 hsl.L = Convert.ToSingle(Math.Log10(hsl.L + 1) / logMax);
-                return hsl.ToRGB();
+                return hsl.ToRgb();
             });
         }
 
@@ -84,9 +84,9 @@ namespace DipLib
             Pipeline((pixel) =>
             {
                 Debug.Assert(pixel != null, nameof(pixel) + " != null");
-                var hsl = pixel.Value.ToHSL();
+                var hsl = pixel.Value.ToHsl();
                 hsl.L = (hsl.L - min) / k;
-                return hsl.ToRGB();
+                return hsl.ToRgb();
             });
         }
 
@@ -96,14 +96,14 @@ namespace DipLib
             foreach (var pixel in this)
             {
                 Debug.Assert(pixel != null, nameof(pixel) + " != null");
-                int level = (int) Math.Round(pixel.Value.ToHSL().S * (levels - 1));
+                int level = (int) Math.Round(pixel.Value.ToHsl().S * (levels - 1));
                 res[level]++;
             }
 
             return res;
         }
 
-        private long[] GetHistogramCDFOfSaturation(int levels)
+        private long[] GetHistogramCdfOfSaturation(int levels)
         {
             var histogram = GetHistogramOfSaturation(levels);
             var res = new long[levels];
@@ -119,16 +119,16 @@ namespace DipLib
 
         public void SaturationHistogramEqualization(int levels)
         {
-            var cdf = GetHistogramCDFOfSaturation(levels);
-            var minCDF = cdf.Min();
-            double denominator = PixelWidth * PixelHeight - minCDF;
+            var cdf = GetHistogramCdfOfSaturation(levels);
+            var minCdf = cdf.Min();
+            double denominator = PixelWidth * PixelHeight - minCdf;
             Pipeline((pixel) =>
             {
                 Debug.Assert(pixel != null, nameof(pixel) + " != null");
-                var hsl = pixel.Value.ToHSL();
+                var hsl = pixel.Value.ToHsl();
                 int level = (int) Math.Round(hsl.S * (levels - 1));
-                hsl.S = Convert.ToSingle((cdf[level] - minCDF) / denominator);
-                return hsl.ToRGB();
+                hsl.S = Convert.ToSingle((cdf[level] - minCdf) / denominator);
+                return hsl.ToRgb();
             });
         }
 
@@ -138,14 +138,14 @@ namespace DipLib
             foreach (var pixel in this)
             {
                 Debug.Assert(pixel != null, nameof(pixel) + " != null");
-                int level = (int) Math.Round(pixel.Value.ToHSL().L * (levels - 1));
+                int level = (int) Math.Round(pixel.Value.ToHsl().L * (levels - 1));
                 res[level]++;
             }
 
             return res;
         }
 
-        private long[] GetHistogramCDFOfLightness(int levels)
+        private long[] GetHistogramCdfOfLightness(int levels)
         {
             var histogram = GetHistogramOfLightness(levels);
             var res = new long[levels];
@@ -161,22 +161,22 @@ namespace DipLib
 
         public void LightnessHistogramEqualization(int levels)
         {
-            var cdf = GetHistogramCDFOfLightness(levels);
-            var minCDF = cdf.Min();
-            double denominator = PixelWidth * PixelHeight - minCDF;
+            var cdf = GetHistogramCdfOfLightness(levels);
+            var minCdf = cdf.Min();
+            double denominator = PixelWidth * PixelHeight - minCdf;
             Pipeline((pixel) =>
             {
                 Debug.Assert(pixel != null, nameof(pixel) + " != null");
-                var hsl = pixel.Value.ToHSL();
+                var hsl = pixel.Value.ToHsl();
                 int level = (int) Math.Round(hsl.L * (levels - 1));
-                hsl.L = Convert.ToSingle((cdf[level] - minCDF) / denominator);
-                return hsl.ToRGB();
+                hsl.L = Convert.ToSingle((cdf[level] - minCdf) / denominator);
+                return hsl.ToRgb();
             });
         }
 
-        public RGBImage Transform(int newWidth, int newHeight, TransformDelegate transform)
+        public RgbImage Transform(int newWidth, int newHeight, TransformDelegate transform)
         {
-            var res = new RGBImage(newWidth, newHeight);
+            var res = new RgbImage(newWidth, newHeight);
             for (int y = 0; y < PixelHeight; y++)
             {
                 for (int x = 0; x < PixelWidth; x++)
@@ -282,7 +282,7 @@ namespace DipLib
             }
         }
 
-        private RGBPixel FindNearestInRow(int x, int y, int start, int end)
+        private RgbPixel FindNearestInRow(int x, int y, int start, int end)
         {
             for (int cursor = 1;; cursor++)
             {
@@ -291,7 +291,7 @@ namespace DipLib
             }
         }
 
-        private void FillNullPixels() => Pipeline((pixel) => pixel ?? RGBColors.Transparent);
+        private void FillNullPixels() => Pipeline((pixel) => pixel ?? RgbColors.Transparent);
 
         public ITransformableImage Shear(double dx, double dy)
         {
@@ -323,7 +323,7 @@ namespace DipLib
 
         public ITransformableImage Scale(double kx, double ky, Interpolation interpolation)
         {
-            RGBImage res;
+            RgbImage res;
             switch (interpolation)
             {
                 case Interpolation.NearestNeighborInterpolation:
@@ -348,7 +348,7 @@ namespace DipLib
             return res;
         }
 
-        private void NearestNeighborInterpolation(RGBImage origin, double kx, double ky)
+        private void NearestNeighborInterpolation(RgbImage origin, double kx, double ky)
         {
             for (int x = 0; x < PixelWidth; x++)
             {
@@ -364,16 +364,16 @@ namespace DipLib
             }
         }
 
-        private RGBImage ScaleWithBilinearInterpolation(double kx, double ky)
+        private RgbImage ScaleWithBilinearInterpolation(double kx, double ky)
         {
-            var res = new RGBImage((PixelWidth * kx).Round(), (PixelHeight * ky).Round());
+            var res = new RgbImage((PixelWidth * kx).Round(), (PixelHeight * ky).Round());
             for (int x = 0; x < PixelWidth - 1; x++)
             {
                 for (int y = 0; y < PixelHeight - 1; y++)
                 {
                     int nx1 = (kx * x).Round(), ny1 = (ky * y).Round();
                     int nx2 = (kx * (x + 1)).Round(), ny2 = (ky * (y + 1)).Round();
-                    RGBPixel p11 = this[x, y].Value,
+                    RgbPixel p11 = this[x, y].Value,
                         p12 = this[x, y + 1].Value,
                         p21 = this[x + 1, y].Value,
                         p22 = this[x + 1, y + 1].Value;
@@ -419,16 +419,16 @@ namespace DipLib
                 ToBrgaPixelsData(), PixelWidth * 4);
         }
 
-        public RGBImage Map(PixelPipelineDelegate process)
+        public RgbImage Map(PixelPipelineDelegate process)
         {
-            var res = new RGBImage(PixelWidth, PixelHeight);
+            var res = new RgbImage(PixelWidth, PixelHeight);
             ForEach((pixel, position) => res[position] = process(pixel));
             return res;
         }
 
-        public RGBImage Map(PixelPositionPipelineDelegate process)
+        public RgbImage Map(PixelPositionPipelineDelegate process)
         {
-            var res = new RGBImage(PixelWidth, PixelHeight);
+            var res = new RgbImage(PixelWidth, PixelHeight);
             ForEach((pixel, position) => res[position] = process(pixel, position));
             return res;
         }
@@ -451,14 +451,14 @@ namespace DipLib
 
                         var targetPixel = this[targetPos];
                         Debug.Assert(targetPixel != null);
-                        res += filter[x, y] * targetPixel.Value.ToHSL().L;
+                        res += filter[x, y] * targetPixel.Value.ToHsl().L;
                     }
                 }
 
                 Debug.Assert(pixel != null, nameof(pixel) + " != null");
-                var newPixel = pixel.Value.ToHSL();
+                var newPixel = pixel.Value.ToHsl();
                 newPixel.L = Convert.ToSingle(res).LimitTo(0, 1);
-                return newPixel.ToRGB();
+                return newPixel.ToRgb();
             });
         }
 
