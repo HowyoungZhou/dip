@@ -49,6 +49,8 @@
                         CanExecute="IsImageOpened" />
         <CommandBinding Command="{x:Static local:DipLibCommands.ExtendedLaplacianFilter}" Executed="ExtendedLaplacianFilter"
                         CanExecute="IsImageOpened" />
+        <CommandBinding Command="{x:Static local:DipLibCommands.BilateralFilter}" Executed="BilateralFilter"
+                        CanExecute="IsImageOpened" />
     </Window.CommandBindings>
 
     <Grid>
@@ -101,6 +103,7 @@
                 <MenuItem Header="均值滤波(_M)" Command="{x:Static local:DipLibCommands.MeanFilter}" />
                 <MenuItem Header="拉普拉斯滤波(_L)" Command="{x:Static local:DipLibCommands.LaplacianFilter}" />
                 <MenuItem Header="扩展拉普拉斯滤波(_E)" Command="{x:Static local:DipLibCommands.ExtendedLaplacianFilter}" />
+                <MenuItem Header="双边滤波(_B)" Command="{x:Static local:DipLibCommands.BilateralFilter}" />
             </MenuItem>
         </Menu>
         <Image Source="{Binding Path=ImageHelper.Image}" Grid.Row="1" />

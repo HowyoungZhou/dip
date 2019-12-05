@@ -11,6 +11,8 @@ namespace DipLib
         IFilterableImage LaplacianFilter();
 
         IFilterableImage ExtendedLaplacianFilter();
+
+        IFilterableImage BilateralFilter(double sigmaD, double sigmaR);
     }
 
     public class Filter : Image<double>

@@ -52,5 +52,23 @@ namespace DipLib
         public IFilterableImage LaplacianFilter() => Filter(Filters.Laplacian);
 
         public IFilterableImage ExtendedLaplacianFilter() => Filter(Filters.ExtendedLaplacian);
+
+        public IFilterableImage BilateralFilter(double sigmaD, double sigmaR)
+        {
+            return Map((pixel, position) =>
+            {
+                double weight = 0, l = 0;
+                ForEach((neighbor, neighborPos) =>
+                {
+                    double w = Math.Exp(-position.GetSquaredDistance(neighborPos) / (2 * sigmaD.Squared()) -
+                                        (pixel.L - neighbor.L).Squared() / (2 * sigmaR.Squared()));
+                    weight += w;
+                    l += w * neighbor.L;
+                });
+                Console.WriteLine("Finished: {0}%",
+                    (double) (position.Y * PixelWidth + position.X) / (PixelHeight * PixelWidth) * 100);
+                return new HslPixel(pixel.H, pixel.S, Convert.ToSingle(l / weight).LimitTo(0, 1), pixel.A);
+            });
+        }
     }
 }

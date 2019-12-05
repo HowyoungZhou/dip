@@ -308,7 +308,7 @@ namespace DipWpf
                 },
             });
             if (!dialog.ShowDialog().Value) return;
-            int size = ((IntInputItem)dialog.InputItems[0]).Value;
+            int size = ((IntInputItem) dialog.InputItems[0]).Value;
             ImageHelper.MeanFilter(size);
         }
 
@@ -320,6 +320,41 @@ namespace DipWpf
         private void ExtendedLaplacianFilter(object sender, ExecutedRoutedEventArgs e)
         {
             ImageHelper.ExtendedLaplacianFilter();
+        }
+
+
+        private void BilateralFilter(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dialog = new InputDialog(new List<dynamic>
+            {
+                new DoubleInputItem()
+                {
+                    Label = "sigmaD",
+                    Value = 1,
+                    Minimum = 1,
+                    Maximum = 1000,
+                    SmallChange = 0.1,
+                    LargeChange = 1,
+                    TickFrequency = 1,
+                    FractionDigits = 2
+                },
+                new DoubleInputItem()
+                {
+                    Label = "sigmaR",
+                    Value = 1,
+                    Minimum = 1,
+                    Maximum = 1000,
+                    SmallChange = 0.1,
+                    LargeChange = 1,
+                    TickFrequency = 1,
+                    FractionDigits = 2
+                },
+            });
+
+            if (!dialog.ShowDialog().Value) return;
+            double d = ((DoubleInputItem) dialog.InputItems[0]).Value;
+            double r = ((DoubleInputItem) dialog.InputItems[1]).Value;
+            ImageHelper.BilateralFilter(d, r);
         }
     }
 }

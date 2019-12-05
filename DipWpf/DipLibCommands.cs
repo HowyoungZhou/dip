@@ -45,5 +45,7 @@ namespace DipWpf
         public static RoutedCommand LaplacianFilter { get; } = new RoutedCommand();
 
         public static RoutedCommand ExtendedLaplacianFilter { get; } = new RoutedCommand();
+
+        public static object BilateralFilter { get; } = new RoutedCommand();
     }
 }

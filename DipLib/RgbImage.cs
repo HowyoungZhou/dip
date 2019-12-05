@@ -447,5 +447,8 @@ namespace DipLib
         public IFilterableImage LaplacianFilter() => Filter(Filters.Laplacian);
 
         public IFilterableImage ExtendedLaplacianFilter() => Filter(Filters.ExtendedLaplacian);
+
+        public IFilterableImage BilateralFilter(double sigmaD, double sigmaR) =>
+            ((HslImage) ToHslImage().BilateralFilter(sigmaD, sigmaR)).ToRgbImage();
     }
 }
