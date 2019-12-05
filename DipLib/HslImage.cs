@@ -20,6 +20,13 @@ namespace DipLib
             return res;
         }
 
+        public HslImage ParallelMap(PixelPositionPipelineDelegate process)
+        {
+            var res = new HslImage(PixelWidth, PixelHeight);
+            ParallelForEach((pixel, position) => res[position] = process(pixel, position));
+            return res;
+        }
+
         public RgbImage ToRgbImage()
         {
             var res = new RgbImage(PixelWidth, PixelHeight);
@@ -29,7 +36,7 @@ namespace DipLib
 
         public IFilterableImage Filter(Filter filter)
         {
-            return Map((pixel, position) =>
+            return ParallelMap((pixel, position) =>
             {
                 double res = 0;
                 for (int x = 0; x < filter.PixelWidth; x++)
@@ -55,7 +62,7 @@ namespace DipLib
 
         public IFilterableImage BilateralFilter(double sigmaD, double sigmaR)
         {
-            return Map((pixel, position) =>
+            return ParallelMap((pixel, position) =>
             {
                 double weight = 0, l = 0;
                 ForEach((neighbor, neighborPos) =>
@@ -65,8 +72,6 @@ namespace DipLib
                     weight += w;
                     l += w * neighbor.L;
                 });
-                Console.WriteLine("Finished: {0}%",
-                    (double) (position.Y * PixelWidth + position.X) / (PixelHeight * PixelWidth) * 100);
                 return new HslPixel(pixel.H, pixel.S, Convert.ToSingle(l / weight).LimitTo(0, 1), pixel.A);
             });
         }

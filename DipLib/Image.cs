@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace DipLib
@@ -133,6 +134,18 @@ namespace DipLib
                 }
             }
 
+            return this;
+        }
+
+        public Image<T> ParallelForEach(PixelPositionHandlerDelegate process)
+        {
+            Parallel.For(0, PixelHeight, (y) =>
+            {
+                for (int x = 0; x < PixelWidth; x++)
+                {
+                    process(Pixels[x, y], new Point(x, y));
+                }
+            });
             return this;
         }
     }
