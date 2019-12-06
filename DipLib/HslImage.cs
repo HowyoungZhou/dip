@@ -70,7 +70,6 @@ namespace DipLib
                 {
                     for (int y = 0; y < size; y++)
                     {
-                        if (x == size / 2 || y == size / 2) continue;
                         var neighborPos = position - origin + new Point(x, y);
                         neighborPos.X = neighborPos.X.LimitTo(0, PixelWidth - 1);
                         neighborPos.Y = neighborPos.Y.LimitTo(0, PixelHeight - 1);

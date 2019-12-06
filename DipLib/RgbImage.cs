@@ -433,6 +433,13 @@ namespace DipLib
             return res;
         }
 
+        public RgbImage ParallelMap(PixelPositionPipelineDelegate process)
+        {
+            var res = new RgbImage(PixelWidth, PixelHeight);
+            ParallelForEach((pixel, position) => res[position] = process(pixel, position));
+            return res;
+        }
+
         public HslImage ToHslImage()
         {
             var res = new HslImage(PixelWidth, PixelHeight);
@@ -449,6 +456,47 @@ namespace DipLib
         public IFilterableImage ExtendedLaplacianFilter() => Filter(Filters.ExtendedLaplacian);
 
         public IFilterableImage BilateralFilter(int size, double sigmaD, double sigmaR) =>
+            BilateralFilterRgb(size, sigmaD, sigmaR);
+
+        public IFilterableImage BilateralFilterL(int size, double sigmaD, double sigmaR) =>
             ((HslImage) ToHslImage().BilateralFilter(size, sigmaD, sigmaR)).ToRgbImage();
+
+        public IFilterableImage BilateralFilterRgb(int size, double sigmaD, double sigmaR)
+        {
+            var origin = new Point(size / 2, size / 2);
+            return ParallelMap((pixel, position) =>
+            {
+                double weightR = 0, weightG = 0, weightB = 0, sumR = 0, sumG = 0, sumB = 0;
+                for (int x = 0; x < size; x++)
+                {
+                    for (int y = 0; y < size; y++)
+                    {
+                        var neighborPos = position - origin + new Point(x, y);
+                        neighborPos.X = neighborPos.X.LimitTo(0, PixelWidth - 1);
+                        neighborPos.Y = neighborPos.Y.LimitTo(0, PixelHeight - 1);
+
+                        RgbPixel neighborPixel = this[neighborPos].Value;
+                        double distFactor = -position.GetSquaredDistance(neighborPos) / (2 * sigmaD);
+                        double rw = Math.Exp(distFactor - (pixel.Value.R - neighborPixel.R).Squared() / (2 * sigmaR));
+                        double gw = Math.Exp(distFactor - (pixel.Value.G - neighborPixel.G).Squared() / (2 * sigmaR));
+                        double bw = Math.Exp(distFactor - (pixel.Value.B - neighborPixel.B).Squared() / (2 * sigmaR));
+
+                        weightR += rw;
+                        weightG += gw;
+                        weightB += bw;
+                        sumR += rw * neighborPixel.R;
+                        sumG += gw * neighborPixel.G;
+                        sumB += bw * neighborPixel.B;
+                    }
+                }
+
+                return new RgbPixel(
+                    (byte) Math.Round(sumR / weightR).LimitTo(0, 255),
+                    (byte) Math.Round(sumG / weightG).LimitTo(0, 255),
+                    (byte) Math.Round(sumB / weightB).LimitTo(0, 255),
+                    pixel.Value.A
+                );
+            });
+        }
     }
 }

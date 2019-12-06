@@ -18,6 +18,8 @@ namespace DipLib
 
         public static float Squared(this float n) => n * n;
 
+        public static double Squared(this int n) => n * n;
+
         public static double Rearrange(this double n, double originMin, double originMax, double min, double max) =>
             (max - originMax) / (min - originMin) * (n - originMin) + originMax;
     }
