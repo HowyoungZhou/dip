@@ -60,19 +60,30 @@ namespace DipLib
 
         public IFilterableImage ExtendedLaplacianFilter() => Filter(Filters.ExtendedLaplacian);
 
-        public IFilterableImage BilateralFilter(double sigmaD, double sigmaR)
+        public IFilterableImage BilateralFilter(int size, double sigmaD, double sigmaR)
         {
+            var origin = new Point(size / 2, size / 2);
             return ParallelMap((pixel, position) =>
             {
                 double weight = 0, l = 0;
-                ForEach((neighbor, neighborPos) =>
+                for (int x = 0; x < size; x++)
                 {
-                    double w = Math.Exp(-position.GetSquaredDistance(neighborPos) / (2 * sigmaD.Squared()) -
-                                        (pixel.L - neighbor.L).Squared() / (2 * sigmaR.Squared()));
-                    weight += w;
-                    l += w * neighbor.L;
-                });
-                return new HslPixel(pixel.H, pixel.S, Convert.ToSingle(l / weight).LimitTo(0, 1), pixel.A);
+                    for (int y = 0; y < size; y++)
+                    {
+                        if (x == size / 2 || y == size / 2) continue;
+                        var neighborPos = position - origin + new Point(x, y);
+                        neighborPos.X = neighborPos.X.LimitTo(0, PixelWidth - 1);
+                        neighborPos.Y = neighborPos.Y.LimitTo(0, PixelHeight - 1);
+                        float neighborL = this[neighborPos].L;
+                        double w = Math.Exp(-position.GetSquaredDistance(neighborPos) / (2 * sigmaD) -
+                                            (pixel.L - neighborL).Squared() / (2 * sigmaR));
+                        weight += w;
+                        l += w * neighborL;
+                    }
+                }
+
+                var res = l / weight;
+                return new HslPixel(pixel.H, pixel.S, Convert.ToSingle(res.LimitTo(0,1)), pixel.A);
             });
         }
     }

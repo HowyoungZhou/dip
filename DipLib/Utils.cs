@@ -9,6 +9,10 @@ namespace DipLib
         public static float LimitTo(this float n, float min, float max) => n < min ? min : n > max ? max : n;
 
         public static int LimitTo(this int n, int min, int max) => n < min ? min : n > max ? max : n;
+        
+        public static double LimitTo(this double n, double min, double max) => n < min ? min : n > max ? max : n;
+        
+        public static byte LimitTo(this byte n, byte min, byte max) => n < min ? min : n > max ? max : n;
 
         public static double Squared(this double n) => n * n;
 

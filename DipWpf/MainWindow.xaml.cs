@@ -327,11 +327,21 @@ namespace DipWpf
         {
             var dialog = new InputDialog(new List<dynamic>
             {
+                new IntInputItem()
+                {
+                    Label = "滤波器大小",
+                    Minimum = 1,
+                    Value = 3,
+                    Maximum = 10,
+                    SmallChange = 1,
+                    LargeChange = 1,
+                    TickFrequency = 1,
+                },
                 new DoubleInputItem()
                 {
-                    Label = "sigmaD",
+                    Label = "平滑参数 - 距离",
                     Value = 1,
-                    Minimum = 1,
+                    Minimum = 0,
                     Maximum = 1000,
                     SmallChange = 0.1,
                     LargeChange = 1,
@@ -340,9 +350,9 @@ namespace DipWpf
                 },
                 new DoubleInputItem()
                 {
-                    Label = "sigmaR",
+                    Label = "平滑参数 - 灰度值差",
                     Value = 1,
-                    Minimum = 1,
+                    Minimum = 0,
                     Maximum = 1000,
                     SmallChange = 0.1,
                     LargeChange = 1,
@@ -352,9 +362,10 @@ namespace DipWpf
             });
 
             if (!dialog.ShowDialog().Value) return;
-            double d = ((DoubleInputItem) dialog.InputItems[0]).Value;
-            double r = ((DoubleInputItem) dialog.InputItems[1]).Value;
-            ImageHelper.BilateralFilter(d, r);
+            int size = ((IntInputItem) dialog.InputItems[0]).Value;
+            double d = ((DoubleInputItem) dialog.InputItems[1]).Value;
+            double r = ((DoubleInputItem) dialog.InputItems[2]).Value;
+            ImageHelper.BilateralFilter(size, d, r);
         }
     }
 }

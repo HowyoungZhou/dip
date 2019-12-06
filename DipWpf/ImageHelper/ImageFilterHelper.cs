@@ -22,9 +22,9 @@ namespace DipWpf
             RefreshImage();
         }
 
-        public void BilateralFilter(double sigmaD, double sigmaR)
+        public void BilateralFilter(int size, double sigmaD, double sigmaR)
         {
-            DipLibImage = (IBitmapSource) ((IFilterableImage) DipLibImage).BilateralFilter(sigmaD, sigmaR);
+            DipLibImage = (IBitmapSource) ((IFilterableImage) DipLibImage).BilateralFilter(size, sigmaD, sigmaR);
             RefreshImage();
         }
     }
