@@ -325,17 +325,20 @@ namespace DipWpf
 
         private void BilateralFilter(object sender, ExecutedRoutedEventArgs e)
         {
+            int maxSize = ImageHelper.DipLibImage.PixelHeight < ImageHelper.DipLibImage.PixelWidth
+                ? ImageHelper.DipLibImage.PixelHeight
+                : ImageHelper.DipLibImage.PixelWidth;
             var dialog = new InputDialog(new List<dynamic>
             {
                 new IntInputItem()
                 {
                     Label = "滤波器大小",
-                    Minimum = 1,
+                    Minimum = 3,
                     Value = 3,
-                    Maximum = 10,
+                    Maximum = maxSize,
                     SmallChange = 1,
                     LargeChange = 1,
-                    TickFrequency = 1,
+                    TickFrequency = maxSize / 10,
                 },
                 new DoubleInputItem()
                 {
@@ -343,20 +346,20 @@ namespace DipWpf
                     Value = 1,
                     Minimum = 0,
                     Maximum = 1000,
-                    SmallChange = 0.1,
-                    LargeChange = 1,
-                    TickFrequency = 1,
+                    SmallChange = 1,
+                    LargeChange = 10,
+                    TickFrequency = 100,
                     FractionDigits = 2
                 },
                 new DoubleInputItem()
                 {
-                    Label = "平滑参数 - 灰度值差",
+                    Label = "平滑参数 - 像素差值",
                     Value = 1,
                     Minimum = 0,
                     Maximum = 1000,
-                    SmallChange = 0.1,
-                    LargeChange = 1,
-                    TickFrequency = 1,
+                    SmallChange = 1,
+                    LargeChange = 10,
+                    TickFrequency = 100,
                     FractionDigits = 2
                 },
             });

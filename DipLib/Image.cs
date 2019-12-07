@@ -148,6 +148,13 @@ namespace DipLib
             });
             return this;
         }
+
+        public Image<T> PixelParallelForEach(PixelPositionHandlerDelegate process)
+        {
+            Parallel.For(0, PixelHeight,
+                (y) => { Parallel.For(0, PixelWidth, (x) => { process(Pixels[x, y], new Point(x, y)); }); });
+            return this;
+        }
     }
 
     public enum Interpolation

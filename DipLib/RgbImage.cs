@@ -439,6 +439,13 @@ namespace DipLib
             ParallelForEach((pixel, position) => res[position] = process(pixel, position));
             return res;
         }
+        
+        public RgbImage PixelParallelMap(PixelPositionPipelineDelegate process)
+        {
+            var res = new RgbImage(PixelWidth, PixelHeight);
+            PixelParallelForEach((pixel, position) => res[position] = process(pixel, position));
+            return res;
+        }
 
         public HslImage ToHslImage()
         {
